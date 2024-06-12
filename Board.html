@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<ul>
+    <li><a onclick="home_button()" href="Home.html">Home</a></li>
+    <li><a onclick="board_button()" href="Board.html">Board</a></li>
+</ul>
+
+<!--framework for the board itself-->
+<svg class="game_board" viewBox="0 0 1000 500">
+    <defs>
+      <pattern id="pattern-slashes" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(40 0 0)">
+        <line y2="7" fill="#ddd" stroke="#aaa" stroke-width="1"></line>
+      </pattern>
+    </defs>
+  
+    <rect x="0" y="0" width="660" height="260" fill="url(#pattern-slashes)" stroke="#ccc"></rect>
+    <rect x="0" y="0" width="430" height="230" fill="#eee" stroke="#ccc"></rect>
+    <circle class="draggable" r="30"></circle>
+</svg>
+
+
+<script src="script.js"></script>
+</body>
+</html>
