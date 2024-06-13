@@ -24,11 +24,8 @@ let state = {
     },
     set pos(p) { 
         this._pos = {
-            //x: clamp(p.x, 0, 430-el.getAttribute('r')), //include some way to change this based on the border object created
-            //y: clamp(p.y, 0, 230-el.getAttribute('r')) //
-
-            x: snapToClosest(p.x, 12),
-            y: snapToClosest(p.y, 12)
+            x: snapToClosest(clamp(p.x, el.getAttribute('r'), 430-el.getAttribute('r')), 12),
+            y: snapToClosest(clamp(p.y, el.getAttribute('r'), 230-el.getAttribute('r')), 12)
         };
         el.setAttribute('cx', this._pos.x);
         el.setAttribute('cy', this._pos.y);
@@ -38,6 +35,7 @@ let state = {
 state.pos = {x: 100, y: 100};
 makeDraggable(state, el);
 
+//clamps returns x value clamped between the lo and hi
 function clamp(x, lo, hi) { 
     return x < lo ? lo : x > hi ? hi : x 
 }
@@ -45,10 +43,10 @@ function clamp(x, lo, hi) {
 //returns new position to snap to closest square
 function snapToClosest(x, unit_length) {
     remainder = x % unit_length;
-    if(remainder > unit_length/2) {
+    if(remainder < unit_length/2) {
         return x - (x % unit_length);
     }else {
-        return x - (x % unit_length);
+        return x - (x % unit_length) + unit_length;
     }
 }
 
