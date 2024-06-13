@@ -23,7 +23,7 @@ body, html {
 
     z-index: 1;
     position: relative;
-    top: -42px;
+    top: -0px;
     background: #eee; 
 }
 circle { 
@@ -32,6 +32,8 @@ circle {
     stroke-width: 0.5px;     
 }
 
+
+/*navbar*/
 ul {
     position: fixed; /*not so sure if this should be fixed or not*/
     z-index: 5;

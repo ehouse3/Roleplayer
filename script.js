@@ -1,3 +1,8 @@
+/*
+THE PLAN IS SIMPLE:
+create class of 'tokens' that can be made multiple of
+create class? for tokens that will store borders for where the tokens can and can't go
+*/
 console.log("loading script...")
 
 function home_button() {
@@ -9,8 +14,7 @@ function board_button() {
 
 //https://www.redblobgames.com/making-of/draggable/examples.html
 //draggability handler
-
-const el = document.querySelector("svg circle");
+const el = document.getElementById("token");
 let state = {
     eventToCoordinates: eventToSvgCoordinates,
     dragging: null,
@@ -20,22 +24,35 @@ let state = {
     },
     set pos(p) { 
         this._pos = {
-            x: clamp(p.x, 0, +430), //*
-            y: clamp(p.y, 0, +230) //*
+            //x: clamp(p.x, 0, 430-el.getAttribute('r')), //include some way to change this based on the border object created
+            //y: clamp(p.y, 0, 230-el.getAttribute('r')) //
+
+            x: snapToClosest(p.x, 12),
+            y: snapToClosest(p.y, 12)
         };
         el.setAttribute('cx', this._pos.x);
         el.setAttribute('cy', this._pos.y);
     },
 }
-state.pos = {x: 20, y: 20};
+
+state.pos = {x: 100, y: 100};
 makeDraggable(state, el);
 
 function clamp(x, lo, hi) { 
     return x < lo ? lo : x > hi ? hi : x 
 }
 
+//returns new position to snap to closest square
+function snapToClosest(x, unit_length) {
+    remainder = x % unit_length;
+    if(remainder > unit_length/2) {
+        return x - (x % unit_length);
+    }else {
+        return x - (x % unit_length);
+    }
+}
+
 function makeDraggable(state, el) {
-    // from https://www.redblobgames.com/making-of/draggable/
     function start(event) {
         if (event.button !== 0) return; // left button only
         let {x, y} = state.eventToCoordinates(event);
