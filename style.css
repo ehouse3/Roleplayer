@@ -9,7 +9,7 @@ body, html {
     width: 100%;
 }
 
-
+/* attribute given to objects being dragged / used for dragging */
 .draggable { 
     cursor: grab; fill: hsl(0 50% 50%);
 }
@@ -17,21 +17,28 @@ body, html {
     cursor: grabbing; fill: hsl(200 50% 50%);
 }
 
-.game_board { 
+/* main game board. svg is child of div */
+.game_board_div {
     width: 100%;
     height: 100%;
+    overflow: scroll;
+
+   
+
+    /* border: 5px solid black; */
+}
+.game_board_svg { 
 
     z-index: 1;
-    position: relative;
-    top: -0px;
+    
     background: #eee; 
+    overflow-y: scroll;
 }
-circle { 
+.token { 
     z-index: 5;
     stroke: black; 
     stroke-width: 0.5px;     
 }
-
 
 /*navbar*/
 ul {
