@@ -4,14 +4,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<!--top navbar-->
 <ul>
     <li><a onclick="home_button()" href="Home.html">Home</a></li>
     <li><a onclick="board_button()" href="Board.html">Board</a></li>
 </ul>
 
-<!--framework for the board itself-->
+<!--game board-->
 <div id = "game_board_div" class="game_board_div">
-  <svg id = "game_board_svg" class="game_board_svg" viewBox="0 0 1000 1000" width="2000" height="2000">
+  <!--svg for game board pattern. viewbox, width and height defined in script.js under game board-->
+  <svg id = "game_board_svg" class="game_board_svg" viewBox="" width="" height="">
       <defs>
         <!--
         <pattern id="pattern-slashes" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(40 0 0)">
@@ -24,10 +26,12 @@
         </pattern>
       </defs>
     
-      <rect x="0" y="0" width="2000px" height="2000px" fill="url(#grid-overlay)" stroke="#ccc"></rect>
+      <!--rect to display pattern, width and height defined in script.js under game board-->
+      <rect id="grid" x="0" y="0" width="" height="" fill="url(#grid-overlay)" stroke="#ccc"></rect>
       <circle id="token" class="token draggable" r="12"></circle>
   </svg>
 </div>
+<!--end game board-->
 
 
 <script src="script.js"></script>

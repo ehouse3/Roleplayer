@@ -5,12 +5,30 @@ create class? for tokens that will store borders for where the tokens can and ca
 */
 console.log("loading script...")
 
+
+
+
+
 function home_button() {
     console.log("loading home page...");
 }
 function board_button() {
     console.log("loading board page...");
 }
+
+//game board
+let grid_height =500;
+let grid_width = 500;
+
+const grid = document.getElementById("grid");
+grid.setAttribute('width',grid_width);
+grid.setAttribute('height',grid_height);
+
+const game_board_svg = document.getElementById("game_board_svg");
+game_board_svg.setAttribute('width',grid_width);
+game_board_svg.setAttribute('height',grid_height);
+game_board_svg.setAttribute('viewBox','0 0 ' + grid_width + ' ' + grid_height);
+
 
 //https://www.redblobgames.com/making-of/draggable/examples.html
 //draggability handler
@@ -24,8 +42,8 @@ let state = {
     },
     set pos(p) { 
         this._pos = {
-            x: snapToClosest(clamp(p.x, el.getAttribute('r'), 430-el.getAttribute('r')), 12),
-            y: snapToClosest(clamp(p.y, el.getAttribute('r'), 230-el.getAttribute('r')), 12)
+            x: snapToClosest(clamp(p.x, el.getAttribute('r'), grid_width-el.getAttribute('r')), 12),
+            y: snapToClosest(clamp(p.y, el.getAttribute('r'), grid_height-el.getAttribute('r')), 12)
         };
         el.setAttribute('cx', this._pos.x);
         el.setAttribute('cy', this._pos.y);
