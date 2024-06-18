@@ -3,9 +3,39 @@ THE PLAN IS SIMPLE:
 create class of 'tokens' that can be made multiple of
 create class? for tokens that will store borders for where the tokens can and can't go
 */
-console.log("loading script...")
+//I am not sure how to link multiple js files together and make the html work, for now it will stay here
+class Token {
+    /*
+    class to create a movable and storable token objects:
+    name: name of the token
+    num_width: number of tiles wide
+    num_height: number of tiles tall
+
+    */
+    constructor(name, num_width, num_height, cur_x, cur_y) {
+        this.name = name;
+        this.num_height = num_height;
+        this.num_width = num_width;
+        this.cur_x = cur_x;
+        this.cur_y = cur_y;
+    }
+
+    get_name() {return this.name;}
+    get_width() {return this.num_width;}
+    get_height() {return this.num_height;}
+    get_cur_x() {return this.cur_x;}
+    get_cur_y() {return this.cur_y;}
+
+    set_cur_x(new_x) {this.cur_x = new_x;}
+    set_cur_y(new_y) {this.cur_y = new_y;}
+    
+}
 
 
+console.log("loading script...");
+
+const woot = new Token("woot",0,0,0,0);
+console.log(woot.get_cur_y());
 
 
 
@@ -103,3 +133,5 @@ function eventToSvgCoordinates(event, el=event.currentTarget) {
     p = p.matrixTransform(svg.getScreenCTM().inverse());
     return p;
 }
+
+
