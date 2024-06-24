@@ -8,34 +8,104 @@ class Token {
     /*
     class to create a movable and storable token objects:
     name: name of the token
+    element: html element
     num_width: number of tiles wide
     num_height: number of tiles tall
+    cur_x: current x coordinate
+    cur_y: current y coordinate
 
     */
-    constructor(name, num_width, num_height, cur_x, cur_y) {
+    constructor(name = '', element, cur_x=0, cur_y=0) {
         this.name = name;
-        this.num_height = num_height;
-        this.num_width = num_width;
+        this.element = element;
         this.cur_x = cur_x;
         this.cur_y = cur_y;
-    }
+        
+        this.dragging = null;
+        this.eventToCoordinates = this.eventToSvgCoordinates;
 
+        console.log("testing js outputs and functionality :");
+        console.log();
+
+    }
+    //getters
     get_name() {return this.name;}
+    get_element() {return this.element;}
     get_width() {return this.num_width;}
     get_height() {return this.num_height;}
     get_cur_x() {return this.cur_x;}
     get_cur_y() {return this.cur_y;}
 
-    set_cur_x(new_x) {this.cur_x = new_x;}
-    set_cur_y(new_y) {this.cur_y = new_y;}
+    //setters
+    set_position(new_x, new_y) {
+        //fix grid length and height for this
+        this.cur_x = snapToClosest(clamp(new_x, this.element.getAttribute('r'), 500 - this.element.getAttribute('r')), 12);
+        this.cur_y = snapToClosest(clamp(new_y, this.element.getAttribute('r'), 500 - this.element.getAttribute('r')), 12);
+
+        this.element.setAttribute('cx', this.cur_x);
+        this.element.setAttribute('cy', this.cur_y);
+        
+        //following functions are used for adjusting coordinates
+        //clamps value, returns x value clamped between the lo and hi
+        function clamp(x, lo, hi) { 
+            return x < lo ? lo : x > hi ? hi : x 
+        }
+
+        //snaps value, snaps value to closest factor of unit_length if it's lower or higher (closest square)
+        function snapToClosest(x, unit_length) {
+            remainder = x % unit_length;
+            if(remainder < unit_length/2) {
+                return x - (x % unit_length);
+            }else {
+                return x - (x % unit_length) + unit_length;
+            }
+        }
+    }
+
+    //makeDraggable(state, el);
     
+    makeDraggable() {
+        function start(event) {
+            if (event.button !== 0) return; // left button only
+            let {x, y} = this.eventToCoordinates(event);
+            this.dragging = {dx: this.cur_x - x, dy: this.cur_y - y};
+            this.element.classList.add('dragging');
+            this.element.setPointerCapture(event.pointerId);
+        }
+
+        function end(_event) {
+            this.dragging = null;
+            this.element.classList.remove('dragging');
+        }
+
+        function move(event) {
+            if (!this.dragging) return;
+            let {x, y} = this.eventToCoordinates(event);
+            this.set_position(x + this.dragging.dx, y + this.dragging.dy);
+        }
+
+        this.element.addEventListener('pointerdown', start);
+        this.element.addEventListener('pointerup', end);
+        this.element.addEventListener('pointercancel', end);
+        this.element.addEventListener('pointermove', move)
+        this.element.addEventListener('touchstart', (e) => e.preventDefault());
+    }
+
+    eventToSvgCoordinates(event, el=event.currentTarget) {
+        const svg = el.ownerSVGElement;
+        let p = svg.createSVGPoint();
+        p.x = event.clientX;
+        p.y = event.clientY;
+        p = p.matrixTransform(svg.getScreenCTM().inverse());
+        return p;
+    }
+
 }
 
 
 console.log("loading script...");
 
-const woot = new Token("woot",0,0,0,0);
-console.log(woot.get_cur_y());
+
 
 
 
@@ -62,76 +132,10 @@ game_board_svg.setAttribute('viewBox','0 0 ' + grid_width + ' ' + grid_height);
 
 //https://www.redblobgames.com/making-of/draggable/examples.html
 //draggability handler
-const el = document.getElementById("token");
-let state = {
-    eventToCoordinates: eventToSvgCoordinates,
-    dragging: null,
-    _pos: undefined,
-    get pos() {
-        return this._pos;
-    },
-    set pos(p) { 
-        this._pos = {
-            x: snapToClosest(clamp(p.x, el.getAttribute('r'), grid_width-el.getAttribute('r')), 12),
-            y: snapToClosest(clamp(p.y, el.getAttribute('r'), grid_height-el.getAttribute('r')), 12)
-        };
-        el.setAttribute('cx', this._pos.x);
-        el.setAttribute('cy', this._pos.y);
-    },
-}
+const new_element = document.getElementById("token");
+const new_token = new Token("woot",new_element, 50, 50);
+new_token.makeDraggable();
 
-state.pos = {x: 100, y: 100};
-makeDraggable(state, el);
 
-//clamps returns x value clamped between the lo and hi
-function clamp(x, lo, hi) { 
-    return x < lo ? lo : x > hi ? hi : x 
-}
-
-//returns new position to snap to closest square
-function snapToClosest(x, unit_length) {
-    remainder = x % unit_length;
-    if(remainder < unit_length/2) {
-        return x - (x % unit_length);
-    }else {
-        return x - (x % unit_length) + unit_length;
-    }
-}
-
-function makeDraggable(state, el) {
-    function start(event) {
-        if (event.button !== 0) return; // left button only
-        let {x, y} = state.eventToCoordinates(event);
-        state.dragging = {dx: state.pos.x - x, dy: state.pos.y - y};
-        el.classList.add('dragging');
-        el.setPointerCapture(event.pointerId);
-    }
-
-    function end(_event) {
-        state.dragging = null;
-        el.classList.remove('dragging');
-    }
-
-    function move(event) {
-        if (!state.dragging) return;
-        let {x, y} = state.eventToCoordinates(event);
-        state.pos = {x: x + state.dragging.dx, y: y + state.dragging.dy};
-    }
-
-    el.addEventListener('pointerdown', start);
-    el.addEventListener('pointerup', end);
-    el.addEventListener('pointercancel', end);
-    el.addEventListener('pointermove', move)
-    el.addEventListener('touchstart', (e) => e.preventDefault());
-}
-
-function eventToSvgCoordinates(event, el=event.currentTarget) {
-    const svg = el.ownerSVGElement;
-    let p = svg.createSVGPoint();
-    p.x = event.clientX;
-    p.y = event.clientY;
-    p = p.matrixTransform(svg.getScreenCTM().inverse());
-    return p;
-}
 
 
