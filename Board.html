@@ -5,11 +5,17 @@
 </head>
 <body>
 <!--top navbar-->
+<!--
 <ul>
     <li><a onclick="home_button()" href="Home.html">Home</a></li>
     <li><a onclick="board_button()" href="Board.html">Board</a></li>
 </ul>
-
+-->
+<!--
+<div class="container_zoom_slider">
+  <input type="range" min="1" max="100" value="50" class="zoom_slider" id="zoom_slider">
+</div>
+-->
 <!--game board-->
 <div id = "game_board_div" class="game_board_div">
   <!--svg for game board pattern. viewbox, width and height defined in script.js under game board-->
@@ -28,7 +34,9 @@
     
       <!--rect to display pattern, width and height defined in script.js under game board-->
       <rect id="grid" x="0" y="0" width="" height="" fill="url(#grid-overlay)" stroke="#ccc"></rect>
-      <circle id="token" class="token draggable" r="12"></circle>
+      <circle class="token draggable" r="24"></circle>
+      <circle class="token draggable" r="12"></circle>
+      
   </svg>
 </div>
 <!--end game board-->
