@@ -27,10 +27,8 @@ body, html {
     height: 100%;
     overflow: scroll;
     zoom: 100%; /*zoom client game board*/
-    /* border: 5px solid black; */
 }
 .game_board_svg { 
-
     z-index: 1;
     
     background: #eee; 
@@ -53,15 +51,16 @@ ul {
     margin: 0px;
     padding: 0px;
     overflow: hidden;
-    background-color: rgb(70, 70, 70);
+    background-color: rgb(107, 107, 107);
     
     /*border-top: 5px solid rgb(90, 90, 90);*/
     /*border-left: 5px solid rgb(90, 90, 90);*/
     border-bottom: 4px solid rgb(62,62,62);
     border-right: 4px solid rgb(62,62,62);
+    border-bottom-right-radius: 10px;
 
-    min-width: 600px;
-    width: 40%;
+    /* min-width: 600px; */
+    width: 600px;
 }
 li {
     float: left;
@@ -83,9 +82,51 @@ li a:hover {
 /*end navbar*/
 
 /*zoom slider*/
+.zoom_slider_container {
+    margin: 0;
+    padding: 0;
+    height: 20px;
+    width: 200px;
+    position: fixed;
+    top: 100px;
+    right: -60px; /*location*/
+    transform: rotate(270deg);
+    /*border: black solid 2px;*/
+}
+.zoom_slider {
+    -webkit-appearance: none;
+    appearance: none;
 
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;  
+    background: rgb(180, 180, 180);;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    
+}
+  
+.zoom_slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
 
-
-
+    width: 25px;
+    height: 25px;
+    border-radius: 50%; 
+    background: rgb(37, 37, 37);
+    cursor: pointer;
+}
+  
+.zoom_slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: rgb(37, 37, 37);
+    cursor: pointer;
+}
 /*end zoom slider*/
 

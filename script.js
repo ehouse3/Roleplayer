@@ -1,9 +1,4 @@
-/*
-THE PLAN IS SIMPLE:
-create class of 'tokens' that can be made multiple of
-create class? for tokens that will store borders for where the tokens can and can't go
-*/
-//I am not sure how to link multiple js files together and make the html work, for now it will stay here
+//once i figure out how to link multiple js files, this can be easily moved to clear up space and make it more readable.
 class Token {
     /*
     class to create a movable and storable token objects:
@@ -46,12 +41,11 @@ class Token {
         this.element.setAttribute('cx', this.cur_x);
         this.element.setAttribute('cy', this.cur_y);
         
-        //following functions are used for adjusting coordinates
+        //the following functions are used for adjusting coordinates
         //clamps value, returns x value clamped between the lo and hi
         function clamp(x, lo, hi) { 
             return x < lo ? lo : x > hi ? hi : x 
         }
-
         //snaps value, snaps value to closest factor of unit_length if it's lower or higher (closest square)
         function snapToClosest(x, unit_length) {
             var remainder = x % unit_length;
@@ -63,11 +57,10 @@ class Token {
         }
     }
 
-    
     //https://www.redblobgames.com/making-of/draggable/examples.html
     //draggability handler
     make_draggable() {
-        console.log("adding drag");
+        console.log("adding dragability to " + this.name);
         //pass in an instance of the class to fix scope
         var _this = this;
 
@@ -114,20 +107,17 @@ class Token {
     
 
 }
+//END OF TOKEN CLASS
 
-
+//load different page buttons
 console.log("loading script...");
-
-
-
-
-
 function home_button() {
     console.log("loading home page...");
 }
 function board_button() {
     console.log("loading board page...");
 }
+
 
 //game board
 let grid_height = 500;
@@ -143,18 +133,48 @@ game_board_svg.setAttribute('height',grid_height);
 game_board_svg.setAttribute('viewBox','0 0 ' + grid_width + ' ' + grid_height);
 
 
+//sets zoom level to new_zoom_value arg
+var board_container = document.getElementById("game_board_div");
+function set_zoom(new_zoom_value) {
+    board_container.style.zoom = new_zoom_value + "%";
+    //console.log("zoom level percent: " + new_zoom_value);
+}
+
+//detects input from zoom slider then calls set_zoom()
+var zoom_slider = document.getElementById("zoom_slider");
+zoom_slider.oninput = function() {
+    set_zoom(Number(zoom_slider.value));
+}
+
+function mouse_zoom(event) {
+    step = zoom_slider.getAttribute("step");
+    if(event.deltaY < 0){
+        zoom_slider.value = Number(zoom_slider.value) + Number(step);
+        set_zoom(zoom_slider.value);
+        console.log("zooming in");
+    }else{
+        zoom_slider.value = Number(zoom_slider.value) - Number(step);
+        set_zoom(zoom_slider.value);
+        console.log("zooming out");
+    }
+}
+
+//document.addEventListener("scroll", zoom_in_step);
+document.addEventListener("wheel", mouse_zoom);
+
+
 
 let new_element = document.getElementsByClassName("token")[0]; //getElementsByClassName returns a list
 //let new_element = document.getElementById("token");
 console.log(new_element);
-let new_token = new Token("woot",new_element, 100, 100);
+let new_token = new Token("big token",new_element, 100, 100);
 new_token.make_draggable();
 
 
 let new_element2 = document.getElementsByClassName("token")[1]; //getElementsByClassName returns a list
 //let new_element = document.getElementById("token");
 console.log(new_element2);
-let new_token2 = new Token("woot",new_element2, 200, 200);
+let new_token2 = new Token("small token",new_element2, 200, 200);
 new_token2.make_draggable();
 
 
