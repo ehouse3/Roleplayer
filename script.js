@@ -101,7 +101,7 @@ class Token {
         console.log("removing draggability from " + this.name);
     }
 }
-//END OF TOKEN CLASS
+//END OF TOKEN CLASS/////////////////////////////////////////////////////////////////////////////////////
 
 //load different page buttons
 console.log("loading script...");
@@ -130,7 +130,8 @@ board_svg.setAttribute('viewBox','0 0 ' + grid_width + ' ' + grid_height);
 //sets zoom level to new_zoom_value arg
 var board_container = document.getElementById("game_board_container");
 function set_zoom(new_zoom_value) {
-    board_container.style.zoom = new_zoom_value + "%";
+    new_zoom_value = new_zoom_value / 100;
+    board_container.style.transform = "scale(" + new_zoom_value + ")";
     //console.log("zoom level percent: " + new_zoom_value);
 }
 
@@ -156,7 +157,8 @@ function mouse_zoom(event) {
 board_container.addEventListener("wheel", (event) => event.preventDefault());
 document.addEventListener("wheel", mouse_zoom);
 
-
+//panning
+board_container.scrollTo(400, 400); //scrolls on start to have board in frame
 var panning = false;
 function start_pan(event) {
     if(event.button == 2){
@@ -177,8 +179,6 @@ function move_pan(event) {
     }
 }
 
-
-
 board_svg.addEventListener('pointerdown', start_pan);
 board_svg.addEventListener('pointerup', end_pan);
 board_svg.addEventListener('pointercancel', end_pan);
@@ -186,10 +186,7 @@ board_svg.addEventListener('pointermove', move_pan);
 board_svg.addEventListener("contextmenu", (event) => event.preventDefault()); //prevent the right click contextmenu from opening on the gameboard
 
 
-
-
-
-
+//creating tokens
 let new_element = document.getElementsByClassName("token")[0]; //getElementsByClassName returns a list
 //let new_element = document.getElementById("token");
 console.log(new_element);

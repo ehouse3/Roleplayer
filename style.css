@@ -31,17 +31,19 @@ body, html {
     width: 100%;
     height: 100%;
     overflow: auto;
-    zoom: 100%; /*zoom client game board*/
+    /*zoom: 100%; /*zoom client game board*/
+    transform: scale(1);
+    
     
     
 }
 #game_board_svg { 
     z-index: 1;
-    border: black solid 2px;
+    border: black solid .5px;
     display: block;
-    margin: auto;
-    margin-top: 200px;
-    margin-bottom: 200px;
+    
+    margin: 400px; /*extra space outside of board*/
+
     
     background: #eee; 
     overflow-y: scroll;
@@ -94,6 +96,7 @@ li a:hover {
 
 /*zoom slider*/
 .zoom_slider_container {
+    z-index: 5;
     margin: 0;
     padding: 0;
     height: 20px;
