@@ -30,7 +30,7 @@ class Token {
     //setters
     set_position(new_x, new_y) {
         //fix grid length and height for this
-        this.cur_x = snapToClosest(clamp(new_x, this.element.getAttribute('r'), 1000 - this.element.getAttribute('r')), 12);
+        this.cur_x = snapToClosest(clamp(new_x, this.element.getAttribute('r'), 2000 - this.element.getAttribute('r')), 12);
         this.cur_y = snapToClosest(clamp(new_y, this.element.getAttribute('r'), 1000 - this.element.getAttribute('r')), 12);
 
         //console.log("cur x : " + this.cur_x + " cur y : " + this.cur_y);
@@ -70,7 +70,7 @@ class Token {
             return p;
         }
 
-        function start(event) {
+        function start_drag(event) {
             if (event.button !== 0) return; // left button only
             console.log(event);
             let {x, y} = eventToSvgCoordinates(event);
@@ -79,21 +79,21 @@ class Token {
             _this.element.setPointerCapture(event.pointerId);
         }
 
-        function end(_event) {
+        function end_drag(_event) {
             _this.dragging = null;
             _this.element.classList.remove('dragging');
         }
 
-        function move(event) {
+        function move_drag(event) {
             if (!_this.dragging) return;
             let {x, y} = eventToSvgCoordinates(event);
             _this.set_position(x + _this.dragging.dx, y + _this.dragging.dy);
         }
 
-        this.element.addEventListener('pointerdown', start);
-        this.element.addEventListener('pointerup', end);
-        this.element.addEventListener('pointercancel', end);
-        this.element.addEventListener('pointermove', move);
+        this.element.addEventListener('pointerdown', start_drag);
+        this.element.addEventListener('pointerup', end_drag);
+        this.element.addEventListener('pointercancel', end_drag);
+        this.element.addEventListener('pointermove', move_drag);
         this.element.addEventListener('touchstart', (event) => event.preventDefault());
     }
 
@@ -115,16 +115,16 @@ function board_button() {
 
 //game board
 let grid_height = 1000;
-let grid_width = 1000;
+let grid_width = 2000;
 
 const grid = document.getElementById("game_board");
 grid.setAttribute('width',grid_width);
 grid.setAttribute('height',grid_height);
 
-const game_board_svg = document.getElementById("game_board_svg");
-game_board_svg.setAttribute('width',grid_width);
-game_board_svg.setAttribute('height',grid_height);
-game_board_svg.setAttribute('viewBox','0 0 ' + grid_width + ' ' + grid_height);
+const board_svg = document.getElementById("game_board_svg");
+board_svg.setAttribute('width',grid_width);
+board_svg.setAttribute('height',grid_height);
+board_svg.setAttribute('viewBox','0 0 ' + grid_width + ' ' + grid_height);
 
 
 //sets zoom level to new_zoom_value arg
@@ -157,7 +157,33 @@ board_container.addEventListener("wheel", (event) => event.preventDefault());
 document.addEventListener("wheel", mouse_zoom);
 
 
+var panning = false;
+function start_pan(event) {
+    if(event.button == 2){
+        console.log("starting panning");
+        panning = true;   
+        event.preventDefault();
+    }
+}
+function end_pan(event) {
+    if(event.button == 2){
+        panning = false;
+        console.log("ending pan");
+    }   
+}
+function move_pan(event) {
+    if(panning) {    
+        board_container.scrollBy(-1 * Number(event.movementX) * (100/zoom_slider.value), -1 * Number(event.movementY) * (100/zoom_slider.value))
+    }
+}
 
+
+
+board_svg.addEventListener('pointerdown', start_pan);
+board_svg.addEventListener('pointerup', end_pan);
+board_svg.addEventListener('pointercancel', end_pan);
+board_svg.addEventListener('pointermove', move_pan);
+board_svg.addEventListener("contextmenu", (event) => event.preventDefault()); //prevent the right click contextmenu from opening on the gameboard
 
 
 
