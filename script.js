@@ -8,19 +8,16 @@ class Token {
     cur_y: current y coordinate
 
     */
-    constructor(name = '', element, cur_x=0, cur_y=0) {
+    constructor(name = '(no name given)', element, cur_x=0, cur_y=0) {
         this.name = name;
         this.element = element;
         this.cur_x = cur_x;
         this.cur_y = cur_y;
-        this.set_position(cur_x, cur_y);
         
-        
+        this.set_position(cur_x, cur_y); //called in constructor to update the position
         this.dragging = null;
 
         console.log("testing js outputs and functionality :");
-        console.log();
-
     }
     //getters, fix to be in get format
     get_name() {return this.name;}
@@ -33,8 +30,8 @@ class Token {
     //setters
     set_position(new_x, new_y) {
         //fix grid length and height for this
-        this.cur_x = snapToClosest(clamp(new_x, this.element.getAttribute('r'), 500 - this.element.getAttribute('r')), 12);
-        this.cur_y = snapToClosest(clamp(new_y, this.element.getAttribute('r'), 500 - this.element.getAttribute('r')), 12);
+        this.cur_x = snapToClosest(clamp(new_x, this.element.getAttribute('r'), 1000 - this.element.getAttribute('r')), 12);
+        this.cur_y = snapToClosest(clamp(new_y, this.element.getAttribute('r'), 1000 - this.element.getAttribute('r')), 12);
 
         //console.log("cur x : " + this.cur_x + " cur y : " + this.cur_y);
 
@@ -97,15 +94,12 @@ class Token {
         this.element.addEventListener('pointerup', end);
         this.element.addEventListener('pointercancel', end);
         this.element.addEventListener('pointermove', move);
-        this.element.addEventListener('touchstart', (e) => e.preventDefault());
+        this.element.addEventListener('touchstart', (event) => event.preventDefault());
     }
 
     stop_draggable() {
         console.log("removing draggability from " + this.name);
     }
-
-    
-
 }
 //END OF TOKEN CLASS
 
@@ -120,10 +114,10 @@ function board_button() {
 
 
 //game board
-let grid_height = 500;
-let grid_width = 500;
+let grid_height = 1000;
+let grid_width = 1000;
 
-const grid = document.getElementById("grid");
+const grid = document.getElementById("game_board");
 grid.setAttribute('width',grid_width);
 grid.setAttribute('height',grid_height);
 
@@ -134,7 +128,7 @@ game_board_svg.setAttribute('viewBox','0 0 ' + grid_width + ' ' + grid_height);
 
 
 //sets zoom level to new_zoom_value arg
-var board_container = document.getElementById("game_board_div");
+var board_container = document.getElementById("game_board_container");
 function set_zoom(new_zoom_value) {
     board_container.style.zoom = new_zoom_value + "%";
     //console.log("zoom level percent: " + new_zoom_value);
@@ -146,21 +140,27 @@ zoom_slider.oninput = function() {
     set_zoom(Number(zoom_slider.value));
 }
 
+//sets zoom_slider value to +1/-1 step then calls set_zoom() to match the new value
 function mouse_zoom(event) {
     step = zoom_slider.getAttribute("step");
     if(event.deltaY < 0){
         zoom_slider.value = Number(zoom_slider.value) + Number(step);
         set_zoom(zoom_slider.value);
-        console.log("zooming in");
+        //console.log("zooming in");
     }else{
         zoom_slider.value = Number(zoom_slider.value) - Number(step);
         set_zoom(zoom_slider.value);
-        console.log("zooming out");
+        //console.log("zooming out");
     }
 }
-
-//document.addEventListener("scroll", zoom_in_step);
+board_container.addEventListener("wheel", (event) => event.preventDefault());
 document.addEventListener("wheel", mouse_zoom);
+
+
+
+
+
+
 
 
 

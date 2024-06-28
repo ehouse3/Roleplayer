@@ -17,7 +17,7 @@
 </div>
 
 <!--game board-->
-<div id = "game_board_div" class="game_board_div" >
+<div id = "game_board_container" class="game_board_container" >
   <!--svg for game board pattern. viewbox, width and height defined in script.js under game board-->
   <svg id = "game_board_svg" class="game_board_svg" viewBox="" width="" height="">
       <defs>
@@ -26,14 +26,15 @@
           <line y2="7" fill="#ddd" stroke="#aaa" stroke-width="1"></line>
         </pattern>
         -->
-        <pattern id="grid-overlay" width="12" height="12" patternUnits="userSpaceOnUse">
+        
+        <pattern id="grid-overlay" width="12" height="12" patternUnits="userSpaceOnUse"> <!--width and height need to match that of js snap_to_closest() [fix later]-->
           <line y2="12" fill="#000" stroke="#000" stroke-width=".5"></line>
           <line x2="12" fill="#000" stroke="#000" stroke-width=".5"></line>
         </pattern>
       </defs>
     
       <!--rect to display pattern, width and height defined in script.js under game board-->
-      <rect id="grid" x="0" y="0" width="" height="" fill="url(#grid-overlay)" stroke="#ccc"></rect>
+      <rect id="game_board" x="0" y="0" width="" height="" fill="url(#grid-overlay)" stroke="#ccc"></rect>
       <circle class="token draggable" r="24"></circle>
       <circle class="token draggable" r="12"></circle>
       
