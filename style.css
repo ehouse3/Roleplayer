@@ -31,8 +31,8 @@ body, html {
     width: 100%;
     height: 100%;
     overflow: auto;
-    /*zoom: 100%; /*zoom client game board*/
-    transform: scale(1);
+    zoom: 100%; /*zoom client game board*/
+    
     
     
     

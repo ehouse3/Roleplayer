@@ -121,17 +121,16 @@ const grid = document.getElementById("game_board");
 grid.setAttribute('width',grid_width);
 grid.setAttribute('height',grid_height);
 
-const board_svg = document.getElementById("game_board_svg");
+var board_container = document.getElementById("game_board_container");
+var board_svg = document.getElementById("game_board_svg");
 board_svg.setAttribute('width',grid_width);
 board_svg.setAttribute('height',grid_height);
 board_svg.setAttribute('viewBox','0 0 ' + grid_width + ' ' + grid_height);
 
 
 //sets zoom level to new_zoom_value arg
-var board_container = document.getElementById("game_board_container");
 function set_zoom(new_zoom_value) {
-    new_zoom_value = new_zoom_value / 100;
-    board_container.style.transform = "scale(" + new_zoom_value + ")";
+    board_container.style.zoom = new_zoom_value + "%";
     //console.log("zoom level percent: " + new_zoom_value);
 }
 
