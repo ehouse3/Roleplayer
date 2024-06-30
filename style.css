@@ -44,7 +44,6 @@ body, html {
     
     margin: 400px; /*extra space outside of board*/
 
-    
     background: #eee; 
     overflow-y: scroll;
 }

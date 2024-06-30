@@ -16,8 +16,6 @@ class Token {
         
         this.set_position(cur_x, cur_y); //called in constructor to update the position
         this.dragging = null;
-
-        console.log("testing js outputs and functionality :");
     }
     //getters, fix to be in get format
     get_name() {return this.name;}
@@ -72,7 +70,6 @@ class Token {
 
         function start_drag(event) {
             if (event.button !== 0) return; // left button only
-            console.log(event);
             let {x, y} = eventToSvgCoordinates(event);
             _this.dragging = {dx: _this.cur_x - x, dy: _this.cur_y - y};
             _this.element.classList.add('dragging');
@@ -117,59 +114,73 @@ function board_button() {
 let grid_height = 1000;
 let grid_width = 2000;
 
-const grid = document.getElementById("game_board");
+var grid = document.getElementById("game_board");
 grid.setAttribute('width',grid_width);
 grid.setAttribute('height',grid_height);
 
 var board_container = document.getElementById("game_board_container");
 var board_svg = document.getElementById("game_board_svg");
+var body = document.getElementById("body");
 board_svg.setAttribute('width',grid_width);
 board_svg.setAttribute('height',grid_height);
 board_svg.setAttribute('viewBox','0 0 ' + grid_width + ' ' + grid_height);
 
-
+console.log("window width: " + body.offsetWidth);
+console.log("width " + board_container.offsetWidth);
 //sets zoom level to new_zoom_value arg
-function set_zoom(new_zoom_value) {
+//adjusts scroll bar to 'zooms in' on cursor
+function set_zoom(new_zoom_value, cursor_x, cursor_y) {
+    console.log("width " + board_container.offsetWidth/30);
+    //console.log("window width: " + body.offsetWidth);
+    //console.log(cursor_x - 0.5 * board_container.offsetWidth);
+    //console.log(cursor_y - 0.5 * board_container.offsetHeight);
+    
+    //console.log(cursor_x);
+    //console.log(cursor_y);
+    board_container.scrollBy(board_container.offsetWidth/20, board_container.offsetHeight/20);
     board_container.style.zoom = new_zoom_value + "%";
-    //console.log("zoom level percent: " + new_zoom_value);
+    console.log("zoom level percent: " + new_zoom_value);
+    console.log();
 }
 
 //detects input from zoom slider then calls set_zoom()
 var zoom_slider = document.getElementById("zoom_slider");
 zoom_slider.oninput = function() {
-    set_zoom(Number(zoom_slider.value));
+    set_zoom(Number(zoom_slider.value), null, null);
 }
 
 //sets zoom_slider value to +1/-1 step then calls set_zoom() to match the new value
+//might want to rework later to not be dependant on zoom slider
 function mouse_zoom(event) {
     step = zoom_slider.getAttribute("step");
+    console.log("X " + event.clientX + " Y " + event.clientY);
     if(event.deltaY < 0){
-        zoom_slider.value = Number(zoom_slider.value) + Number(step);
-        set_zoom(zoom_slider.value);
+        zoom_slider.value = Number(zoom_slider.value) + Number(step); //manually increases zoom by 1 step
+        set_zoom(zoom_slider.value, event.clientX, event.clientY);
         //console.log("zooming in");
     }else{
-        zoom_slider.value = Number(zoom_slider.value) - Number(step);
-        set_zoom(zoom_slider.value);
+        zoom_slider.value = Number(zoom_slider.value) - Number(step); //manually decreases zoom by 1 step
+        set_zoom(zoom_slider.value, event.clientX, event.clientY);
         //console.log("zooming out");
     }
 }
 board_container.addEventListener("wheel", (event) => event.preventDefault());
-document.addEventListener("wheel", mouse_zoom);
+board_container.addEventListener("wheel", mouse_zoom);
 
 //panning
 board_container.scrollTo(400, 400); //scrolls on start to have board in frame
 var panning = false;
 function start_pan(event) {
     if(event.button == 2){
-        console.log("starting panning");
+        //console.log("starting pan");
         panning = true;   
         event.preventDefault();
     }
 }
 function end_pan(event) {
     if(event.button == 2){
+        //console.log("ending pan");
         panning = false;
-        console.log("ending pan");
     }   
 }
 function move_pan(event) {
@@ -188,16 +199,21 @@ board_svg.addEventListener("contextmenu", (event) => event.preventDefault()); //
 //creating tokens
 let new_element = document.getElementsByClassName("token")[0]; //getElementsByClassName returns a list
 //let new_element = document.getElementById("token");
-console.log(new_element);
 let new_token = new Token("big token",new_element, 100, 100);
 new_token.make_draggable();
 
 
 let new_element2 = document.getElementsByClassName("token")[1]; //getElementsByClassName returns a list
 //let new_element = document.getElementById("token");
-console.log(new_element2);
 let new_token2 = new Token("small token",new_element2, 200, 200);
 new_token2.make_draggable();
+
+
+let new_element3 = document.getElementsByClassName("token")[2]; //getElementsByClassName returns a list
+//let new_element = document.getElementById("token");
+let new_token3 = new Token("really large token",new_element3, 400, 400);
+new_token3.make_draggable();
+
 
 
 
