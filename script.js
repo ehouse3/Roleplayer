@@ -125,20 +125,30 @@ board_svg.setAttribute('width',grid_width);
 board_svg.setAttribute('height',grid_height);
 board_svg.setAttribute('viewBox','0 0 ' + grid_width + ' ' + grid_height);
 
-console.log("window width: " + body.offsetWidth);
+//console.log("window width: " + body.offsetWidth);
 console.log("width " + board_container.offsetWidth);
-//sets zoom level to new_zoom_value arg
-//adjusts scroll bar to 'zooms in' on cursor
+var cur_board_width = board_container.offsetWidth;
+var cur_board_height = board_container.offsetHeight;
 function set_zoom(new_zoom_value, cursor_x, cursor_y) {
-    console.log("width " + board_container.offsetWidth/30);
     //console.log("window width: " + body.offsetWidth);
-    //console.log(cursor_x - 0.5 * board_container.offsetWidth);
-    //console.log(cursor_y - 0.5 * board_container.offsetHeight);
-    
     //console.log(cursor_x);
     //console.log(cursor_y);
-    board_container.scrollBy(board_container.offsetWidth/20, board_container.offsetHeight/20);
+    
     board_container.style.zoom = new_zoom_value + "%";
+
+    //if called from not scroll wheel
+    if(cursor_x == null && cursor_y == null) {
+        board_container.scrollBy((cur_board_width - board_container.offsetWidth)/2 , (cur_board_height - board_container.offsetHeight)/2);
+    }else if(cursor_x && cursor_y) {
+        //board_container.scrollTo();
+        console.log();
+    }else {
+        console.log("SCROLLING ERROR");
+    }
+    cur_board_width = board_container.offsetWidth;
+    cur_board_height = board_container.offsetHeight;
+
+    console.log("width " + board_container.offsetWidth);
     console.log("zoom level percent: " + new_zoom_value);
     console.log();
 }

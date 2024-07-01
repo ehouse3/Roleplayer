@@ -42,7 +42,7 @@ body, html {
     border: black solid .5px;
     display: block;
     
-    margin: 400px; /*extra space outside of board*/
+    margin: 800px; /*extra space outside of board*/
 
     background: #eee; 
     overflow-y: scroll;
