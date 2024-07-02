@@ -16,7 +16,8 @@ body, html {
 }
 .dragging { 
     cursor: grabbing; 
-    fill: hsl(200 50% 50%);
+    /*fill: hsl(200 50% 50%); */
+    fill: green;
 }
 .token { 
     z-index: 5;

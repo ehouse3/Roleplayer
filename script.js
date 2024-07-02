@@ -126,9 +126,10 @@ board_svg.setAttribute('height',grid_height);
 board_svg.setAttribute('viewBox','0 0 ' + grid_width + ' ' + grid_height);
 
 //console.log("window width: " + body.offsetWidth);
-console.log("width " + board_container.offsetWidth);
+//console.log("width " + board_container.offsetWidth);
 var cur_board_width = board_container.offsetWidth;
 var cur_board_height = board_container.offsetHeight;
+var cur_zoom_value = 100;
 function set_zoom(new_zoom_value, cursor_x, cursor_y) {
     //console.log("window width: " + body.offsetWidth);
     //console.log(cursor_x);
@@ -136,21 +137,35 @@ function set_zoom(new_zoom_value, cursor_x, cursor_y) {
     
     board_container.style.zoom = new_zoom_value + "%";
 
-    //if called from not scroll wheel
-    if(cursor_x == null && cursor_y == null) {
+    
+    if(cursor_x == null && cursor_y == null) { //called from not scroll wheel
         board_container.scrollBy((cur_board_width - board_container.offsetWidth)/2 , (cur_board_height - board_container.offsetHeight)/2);
-    }else if(cursor_x && cursor_y) {
-        //board_container.scrollTo();
-        console.log();
+    }else if(cursor_x && cursor_y) { //called from scroll wheel
+        console.log("cursor pos: " + cursor_x * (cur_zoom_value/100));
+        console.log("cursor pos: " + cursor_x * (new_zoom_value/100));
+        board_container.scrollBy((cur_board_width - board_container.offsetWidth)/2 , (cur_board_height - board_container.offsetHeight)/2);//centers
+        
+        var cur_centered_cursor_x = ((cursor_x-(body.offsetWidth/2)) / (cur_zoom_value/100));
+        var cur_centered_cursor_y = ((cursor_y-(body.offsetHeight/2)) / (cur_zoom_value/100));
+        var new_centered_cursor_x = ((cursor_x-(body.offsetWidth/2)) / (new_zoom_value/100))
+        var new_centered_cursor_y = ((cursor_y-(body.offsetHeight/2)) / (new_zoom_value/100))
+        board_container.scrollBy(cur_centered_cursor_x - new_centered_cursor_x, cur_centered_cursor_y - new_centered_cursor_y); 
+        
+        
+        
+        //console.log("centered monitor cursor:" + cursor_x-(body.offsetWidth/2)); //make it proportional to the board_container.offsetWidth somehow
+        
+        //console.log(cursor_x);
     }else {
         console.log("SCROLLING ERROR");
     }
     cur_board_width = board_container.offsetWidth;
     cur_board_height = board_container.offsetHeight;
+    cur_zoom_value = new_zoom_value;
 
-    console.log("width " + board_container.offsetWidth);
-    console.log("zoom level percent: " + new_zoom_value);
-    console.log();
+    //console.log("width " + board_container.offsetWidth);
+    //console.log("zoom level percent: " + new_zoom_value);
+    console.log("\n");
 }
 
 //detects input from zoom slider then calls set_zoom()
