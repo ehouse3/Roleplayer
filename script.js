@@ -90,7 +90,7 @@ class Token {
 
         function start_drag(event) { //starting dragging event handler
             if (event.button !== 0) return; //on left click
-            let {x, y} = eventToSvgCoordinates(event);
+            let {x, y} = event_to_svg_coordinates(event);
             _this.dragging = {dx: _this.cur_x - x, dy: _this.cur_y - y};
             _this.element.classList.add('dragging');
             _this.element.setPointerCapture(event.pointerId);
@@ -103,7 +103,7 @@ class Token {
 
         function move_drag(event) { //dragging on mouse move event handler
             if (!_this.dragging) return;
-            let {x, y} = eventToSvgCoordinates(event);
+            let {x, y} = event_to_svg_coordinates(event);
             _this.set_position(x + _this.dragging.dx, y + _this.dragging.dy);
         }
 
