@@ -8,11 +8,16 @@ class Token {
     cur_y: current y coordinate
 
     */
-    constructor(name = '(no name given)', element, cur_x=0, cur_y=0) {
+    constructor(name = '(no name given)', element, cur_x=0, cur_y=0, width) {
         this.name = name;
         this.element = element;
         this.cur_x = cur_x;
         this.cur_y = cur_y;
+        if(width) {
+            this.width = width;
+        } else {
+            this.width = this.element.getAttribute("r");
+        }
         
         this.set_position(cur_x, cur_y); //called in constructor to update the position
         this.dragging = null;
@@ -27,28 +32,45 @@ class Token {
 
     //setters
     set_position(new_x, new_y) {
+        grid_width = 2000;
+        grid_height = 1000;
+
         //fix grid length and height for this
-        this.cur_x = snapToClosest(clamp(new_x, this.element.getAttribute('r'), 2000 - this.element.getAttribute('r')), 12);
-        this.cur_y = snapToClosest(clamp(new_y, this.element.getAttribute('r'), 1000 - this.element.getAttribute('r')), 12);
+        this.cur_x = snap_to_grid(clamp(new_x, this.width, grid_width - this.width), 12, this.width);
+        this.cur_y = snap_to_grid(clamp(new_y, this.width, grid_height - this.width), 12, this.width);
 
         //console.log("cur x : " + this.cur_x + " cur y : " + this.cur_y);
 
         this.element.setAttribute('cx', this.cur_x);
         this.element.setAttribute('cy', this.cur_y);
         
-        //the following functions are used for adjusting coordinates
+        //the following functions are used for adjusting coordinates in grad:
         //clamps value, returns x value clamped between the lo and hi
         function clamp(x, lo, hi) { 
             return x < lo ? lo : x > hi ? hi : x 
         }
         //snaps value, snaps value to closest factor of unit_length if it's lower or higher (closest square)
-        function snapToClosest(x, unit_length) {
+        function snap_to_grid(x, unit_length, width) {
+            
             var remainder = x % unit_length;
-            if(remainder < unit_length/2) {
-                return x - (x % unit_length);
+            if(width % 12 == 0) {
+                console.log("object is even number of tiles");
+                if(remainder < unit_length/2) {
+                    return x - remainder;
+                }else {
+                    return x - remainder + unit_length;
+                }
             }else {
-                return x - (x % unit_length) + unit_length;
+                console.log("object is odd number of tiles");
+                if(remainder - unit_length/2 < unit_length/2) {
+                    return x - remainder + unit_length/2;
+                }else {
+                    return x - remainder + unit_length + unit_length/2;
+                } 
             }
+
+
+           
         }
     }
 
@@ -141,21 +163,15 @@ function set_zoom(new_zoom_value, cursor_x, cursor_y) {
     if(cursor_x == null && cursor_y == null) { //called from not scroll wheel
         board_container.scrollBy((cur_board_width - board_container.offsetWidth)/2 , (cur_board_height - board_container.offsetHeight)/2);
     }else if(cursor_x && cursor_y) { //called from scroll wheel
-        console.log("cursor pos: " + cursor_x * (cur_zoom_value/100));
-        console.log("cursor pos: " + cursor_x * (new_zoom_value/100));
         board_container.scrollBy((cur_board_width - board_container.offsetWidth)/2 , (cur_board_height - board_container.offsetHeight)/2);//centers
         
         var cur_centered_cursor_x = ((cursor_x-(body.offsetWidth/2)) / (cur_zoom_value/100));
         var cur_centered_cursor_y = ((cursor_y-(body.offsetHeight/2)) / (cur_zoom_value/100));
-        var new_centered_cursor_x = ((cursor_x-(body.offsetWidth/2)) / (new_zoom_value/100))
-        var new_centered_cursor_y = ((cursor_y-(body.offsetHeight/2)) / (new_zoom_value/100))
+        var new_centered_cursor_x = ((cursor_x-(body.offsetWidth/2)) / (new_zoom_value/100));
+        var new_centered_cursor_y = ((cursor_y-(body.offsetHeight/2)) / (new_zoom_value/100));
+
         board_container.scrollBy(cur_centered_cursor_x - new_centered_cursor_x, cur_centered_cursor_y - new_centered_cursor_y); 
         
-        
-        
-        //console.log("centered monitor cursor:" + cursor_x-(body.offsetWidth/2)); //make it proportional to the board_container.offsetWidth somehow
-        
-        //console.log(cursor_x);
     }else {
         console.log("SCROLLING ERROR");
     }
@@ -220,17 +236,21 @@ board_svg.addEventListener('pointercancel', end_pan);
 board_svg.addEventListener('pointermove', move_pan);
 board_svg.addEventListener("contextmenu", (event) => event.preventDefault()); //prevent the right click contextmenu from opening on the gameboard
 
-
+//arrow key bindings    
+function keydown_handler(event) {
+    console.log(event.key);
+}
+document.addEventListener("keydown", keydown_handler);
 //creating tokens
 let new_element = document.getElementsByClassName("token")[0]; //getElementsByClassName returns a list
 //let new_element = document.getElementById("token");
-let new_token = new Token("big token",new_element, 100, 100);
+let new_token = new Token("big token",new_element, 100, 100, 6);
 new_token.make_draggable();
 
 
 let new_element2 = document.getElementsByClassName("token")[1]; //getElementsByClassName returns a list
 //let new_element = document.getElementById("token");
-let new_token2 = new Token("small token",new_element2, 200, 200);
+let new_token2 = new Token("small token",new_element2, 200, 200, 18);
 new_token2.make_draggable();
 
 
