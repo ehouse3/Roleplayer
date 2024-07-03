@@ -9,28 +9,31 @@ class Token {
 
     */
     constructor(name = '(no name given)', element, cur_x=0, cur_y=0, width) {
-        this.name = name;
-        this.element = element;
-        this.cur_x = cur_x;
-        this.cur_y = cur_y;
-        if(width) {
-            this.width = width;
+        //uses _var naming scheme to prevent idefinite recursive calls
+        this._name = name;
+        this._element = element;
+        this._cur_x = cur_x;
+        this._cur_y = cur_y;
+        if(width) { 
+            this._width = width;
         } else {
-            this.width = this.element.getAttribute("r");
+            this._width = this.element.getAttribute("r");
         }
         
-        this.set_position(cur_x, cur_y); //called in constructor to update the position
-        this.dragging = null;
+        this.set_position(cur_x, cur_y); //called in constructor to update the start position
+        this.dragging = null; //currently dragging
     }
-    //getters, fix to be in get format
-    get_name() {return this.name;}
-    get_element() {return this.element;}
-    get_width() {return this.num_width;}
-    get_height() {return this.num_height;}
-    get_cur_x() {return this.cur_x;}
-    get_cur_y() {return this.cur_y;}
+    //getter functions
+    get name() { return this._name; }
+    get element() { return this._element; }
+    get width() { return this._width; }
+    get cur_x() { return this._cur_x; }
+    get cur_y() { return this._cur_y; }
 
-    //setters
+    //setter functions
+    set cur_x(new_x) { this._cur_x = new_x; }
+    set cur_y(new_y) { this._cur_y = new_y; }
+    set name(new_name) { this._name = new_name; }
     set_position(new_x, new_y) {
         grid_width = 2000;
         grid_height = 1000;
@@ -67,6 +70,7 @@ class Token {
             }
         }
     }
+
 
     //https://www.redblobgames.com/making-of/draggable/examples.html
     //draggability handler
@@ -111,8 +115,10 @@ class Token {
         this.element.addEventListener('touchstart', (event) => event.preventDefault());
     }
 
-    stop_draggable() {
+    remove_draggable() { 
+        //not functional, need to adjust scope of event handler functions in order to remove the listeners alltogether
         console.log("removing draggability from " + this.name);
+        
     }
 }
 //END OF TOKEN CLASS/////////////////////////////////////////////////////////////////////////////////////
@@ -239,6 +245,7 @@ new_token2.make_draggable();
 let new_element3 = document.getElementsByClassName("token")[2]; 
 let new_token3 = new Token("really large token",new_element3, 400, 400);
 new_token3.make_draggable();
+new_token3.remove_draggable();
 
 
 
