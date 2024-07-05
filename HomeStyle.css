@@ -11,14 +11,15 @@ body, html {
 
 
 /*navbar*/
-/*change into id's*/
-ul {
+.navbar {
     position: fixed; /*not so sure if this should be fixed or not*/
     z-index: 5;
 
     list-style-type: none;
     font-size: 16;
     margin: 0px;
+    margin-left: 0px;
+    transition: margin-left 1.2s ease-in-out;
     padding: 0px;
     overflow: hidden;
     background-color: rgb(107, 107, 107);
@@ -32,54 +33,92 @@ ul {
     /* min-width: 600px; */
     top: 0px;
     width: 500px;
+    max-width: 30%;
 }
-li {
+.navbar_li {
     float: left;
 }
-li a {
+.navbar_li_a {
     display: block;
     color: white;
     text-align: center;
+
     padding-top: 10px;
     padding-bottom: 5px;
     padding-left: 10px;
     padding-right: 10px;
+
     text-decoration: none;
     user-select: none;
-
 }
-  
-li a:hover {
-    background-color: rgb(55, 55, 55);
+.navbar_li_a:hover {
+    background-color: rgb(80, 80, 80);
     cursor: pointer;
-    border-bottom: 5px solid rgb(55, 55, 55);
+    border-bottom: 5px solid rgb(80, 80, 80);
+}
+.minimize_navbar {  
+    float: right;
+    width: 30px;
+    text-align: center;
+    padding: 0px;
+}
+.minimize_navbar_seperator {
+    width: 4px;
+    height: 39px;
+    float: right;
+    margin-bottom: 0px;
+    background-color: rgb(68,68,68);
+    
 }
 /*end navbar*/
 
 #title {
     text-align: center;
-    font-size: 75px;
-    letter-spacing: 6px;
+    font-size: 100px;
+    letter-spacing: 8px;
+    z-index: 5;
 
     
     margin: auto;
     padding: 0px;
     width: auto;
     height: 100px;
-    transform: skewY(-2deg); /* unscew the text */
+    transform: skewY(-4deg); /* unscew the text */
 }
 #title_container {
     background-color: rgb(111, 117, 130);
-    border: 1px black solid;
+    /*border: 1px black solid;*/
     
     top: 0px;
     width: auto;
+    height: 150px;
+    transform: skewY(4deg);
+    margin: 0px;
+    padding: 0px;
+    z-index: 5;
+}
+#title_container_filler {
+    width: 50%;
     height: 100px;
-    transform: skewY(2deg);
+    background-color: rgb(111, 117, 130);
+    /*border: 1px black solid;*/
+    right: 0px;
+
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    z-index: 0;
 }
 #title_background_gradient {
     /*border: black 1px solid; */
+    z-index: 0;
     height: 150px;
     background-image: linear-gradient(0deg, rgb(136, 138, 143), rgb(111, 117, 130));
-    transform: skewY(2deg);
+    transform: skewY(4deg);
+    margin: 0px;
+    padding: 0px;
 }
+#section_1 {
+    height: 2000px;
+}
+

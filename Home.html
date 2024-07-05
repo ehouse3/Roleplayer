@@ -5,18 +5,23 @@
 </head>
 
 <body>
-<ul>  
-    <li><a style="border-bottom: 5px solid rgb(68,68,68);" onclick="home_button()" href="Home.html">Home</a></li>
-    <li><a onclick="board_button()" href="Board.html">Board</a></li>
+<ul class="navbar" id="navbar">  
+    <li class="navbar_li"><a class="navbar_li_a" style="border-bottom: 5px solid rgb(68,68,68);" onclick="home_button()" href="Home.html">Home</a></li>
+    <li class="navbar_li"><a class="navbar_li_a" onclick="board_button()" href="Board.html">Board</a></li>
+    <li class="minimize_navbar"><a class="navbar_li_a" onclick="move_navbar_button()">&lt</a></li>
+    <li class="minimize_navbar_seperator"></li>
 </ul>
 
-
+<div id="title_container_filler"></div>
 <div id="title_container">
     <h1 id="title">ROLEPLAYER</h1>
 </div>
 <div id="title_background_gradient"></div>
 
+<div id="section_1">
+    <p>An online 2D tabletop simulator for tabletop role playing games</p>
+</div>
 
-
+<script src="Home_Script.js"></script>
 </body>
 </html>

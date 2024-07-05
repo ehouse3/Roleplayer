@@ -50,14 +50,15 @@ body, html {
 
 
 /*navbar*/
-/*change into id's*/
-ul {
+.navbar {
     position: fixed; /*not so sure if this should be fixed or not*/
     z-index: 5;
 
     list-style-type: none;
     font-size: 16;
     margin: 0px;
+    margin-left: 0px;
+    transition: margin-left 1.2s ease-in-out;
     padding: 0px;
     overflow: hidden;
     background-color: rgb(107, 107, 107);
@@ -69,13 +70,14 @@ ul {
     border-bottom-right-radius: 10px;
 
     /* min-width: 600px; */
-    width: 500px;
     top: 0px;
+    width: 500px;
+    max-width: 30%;
 }
-li {
+.navbar_li {
     float: left;
 }
-li a {
+.navbar_li_a {
     display: block;
     color: white;
     text-align: center;
@@ -85,13 +87,25 @@ li a {
     padding-right: 10px;
     text-decoration: none;
     user-select: none;
-
 }
-  
-li a:hover {
-    background-color: rgb(55, 55, 55);
+.navbar_li_a:hover {
+    background-color: rgb(80, 80, 80);
     cursor: pointer;
-    border-bottom: 5px solid rgb(55, 55, 55);
+    border-bottom: 5px solid rgb(80, 80, 80);
+}
+.minimize_navbar {  
+    float: right;
+    width: 30px;
+    text-align: center;
+    padding: 0px;
+}
+.minimize_navbar_seperator {
+    width: 4px;
+    height: 39px;
+    float: right;
+    margin-bottom: 0px;
+    background-color: rgb(68,68,68);
+    
 }
 /*end navbar*/
 
