@@ -8,16 +8,20 @@ class Token {
     cur_y: current y coordinate
 
     */
-    constructor(name = '(no name given)', element, cur_x=0, cur_y=0, width) {
+    constructor(name = '(no name given)', element_parent, cur_x=0, cur_y=0, width) {
         //uses _var naming scheme to prevent idefinite recursive calls
         this._name = name;
-        this._element = element;
+
+        this._element_parent = element_parent;
+        this._element_circle_0 = element_parent.children[0];
+        this._element_circle_1 = element_parent.children[1];
+
         this._cur_x = cur_x;
         this._cur_y = cur_y;
         if(width) { 
             this._width = width;
         } else {
-            this._width = this.element.getAttribute("r");
+            this._width = this.element_circle_0.getAttribute("r");
         }
         
         this.set_position(cur_x, cur_y); //called in constructor to update the start position
@@ -25,7 +29,9 @@ class Token {
     }
     //getter functions
     get name() { return this._name; }
-    get element() { return this._element; }
+    get element_parent() { return this._element_parent; }
+    get element_circle_0() { return this._element_circle_0; }
+    get element_circle_1() { return this._element_circle_1; }
     get width() { return this._width; }
     get cur_x() { return this._cur_x; }
     get cur_y() { return this._cur_y; }
@@ -44,8 +50,7 @@ class Token {
 
         //console.log("cur x : " + this.cur_x + " cur y : " + this.cur_y);
 
-        this.element.setAttribute('cx', this.cur_x);
-        this.element.setAttribute('cy', this.cur_y);
+        this.element_parent.setAttribute("transform", "translate(" + this.cur_x + "," + this.cur_y + ")");
         
         //the following functions are used for adjusting coordinates in grad:
         //clamps value, returns x value clamped between the lo and hi
@@ -92,13 +97,13 @@ class Token {
             if (event.button !== 0) return; //on left click
             let {x, y} = event_to_svg_coordinates(event);
             _this.dragging = {dx: _this.cur_x - x, dy: _this.cur_y - y};
-            _this.element.classList.add('dragging');
-            _this.element.setPointerCapture(event.pointerId);
+            _this.element_parent.classList.add('dragging');
+            _this.element_parent.setPointerCapture(event.pointerId);
         }
 
         function end_drag(_event) { //ending drag event handler
             _this.dragging = null;
-            _this.element.classList.remove('dragging');
+            _this.element_parent.classList.remove('dragging');
         }
 
         function move_drag(event) { //dragging on mouse move event handler
@@ -108,17 +113,25 @@ class Token {
         }
 
         //binding handlers
-        this.element.addEventListener('pointerdown', start_drag);
-        this.element.addEventListener('pointerup', end_drag);
-        this.element.addEventListener('pointercancel', end_drag);
-        this.element.addEventListener('pointermove', move_drag);
-        this.element.addEventListener('touchstart', (event) => event.preventDefault());
+        this.element_parent.addEventListener('pointerdown', start_drag);
+        this.element_parent.addEventListener('pointerup', end_drag);
+        this.element_parent.addEventListener('pointercancel', end_drag);
+        this.element_parent.addEventListener('pointermove', move_drag);
+        this.element_parent.addEventListener('touchstart', (event) => event.preventDefault());
     }
 
     remove_draggable() { 
         //not functional, need to adjust scope of event handler functions in order to remove the listeners alltogether
         console.log("removing draggability from " + this.name);
         
+    }
+
+    //setting border colors
+    set_border(inner_color, outer_color) {
+        console.log("setting border");
+        //woot = this.element_parent.getComputedStyle(this._element_circle_0);
+        //console.log(woot);
+
     }
 }
 //END OF TOKEN CLASS/////////////////////////////////////////////////////////////////////////////////////
@@ -212,7 +225,7 @@ zoom_slider.oninput = function() {
 //might want to rework later to not be dependant on zoom slider
 function mouse_zoom(event) {
     step = zoom_slider.getAttribute("step");
-    console.log("X " + event.clientX + " Y " + event.clientY);
+    //console.log("X " + event.clientX + " Y " + event.clientY);
     if(event.deltaY < 0){
         zoom_slider.value = Number(zoom_slider.value) + Number(step); //manually increases zoom by 1 step
         set_zoom(zoom_slider.value, event.clientX, event.clientY);
@@ -227,7 +240,7 @@ board_container.addEventListener("wheel", (event) => event.preventDefault());
 board_container.addEventListener("wheel", mouse_zoom);
 
 //panning
-board_container.scrollTo(800, 800); //scrolls on start to have board in frame
+board_container.scrollTo(500, 500); //scrolls on start to have board in frame
 var panning = false;    
 function start_pan(event) { //starting pan event handler
     if(event.button == 2){
@@ -256,20 +269,14 @@ board_svg.addEventListener("contextmenu", (event) => event.preventDefault()); //
 
 
 //creating tokens
-let new_element = document.getElementsByClassName("token")[0]; 
-let new_token = new Token("big token",new_element, 100, 100, 6);
-new_token.make_draggable();
+
+let new_element3 = document.getElementsByClassName("token")[0];
 
 
-let new_element2 = document.getElementsByClassName("token")[1]; 
-let new_token2 = new Token("small token",new_element2, 200, 200, 18);
-new_token2.make_draggable();
-
-
-let new_element3 = document.getElementsByClassName("token")[2]; 
-let new_token3 = new Token("really large token",new_element3, 400, 400);
+let new_token3 = new Token("really large token", new_element3, 400, 400);
 new_token3.make_draggable();
-new_token3.remove_draggable();
+new_token3.set_border([255,0,0],[0,255,0]);
+
 
 
 

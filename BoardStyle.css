@@ -12,17 +12,20 @@ body, html {
 /* token/draggable attributes */
 .draggable { 
     cursor: grab; 
-    fill: hsl(0 50% 50%);
+    fill: rgb(180, 180, 180);
+    stroke: rgb(0, 255, 0);
+    stroke-width: 4px;
 }
 .dragging { 
     cursor: grabbing; 
     /*fill: hsl(200 50% 50%); */
-    fill: green;
+    opacity: 80%;
+    
 }
 .token { 
     z-index: 5;
-    stroke: black; 
-    stroke-width: 0.5px;     
+    stroke: rgb(255, 0, 0); 
+    stroke-width: 2px;     
 }
 
 
