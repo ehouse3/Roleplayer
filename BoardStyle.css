@@ -13,7 +13,6 @@ body, html {
 .draggable { 
     cursor: grab; 
     fill: rgb(180, 180, 180);
-    stroke: rgb(0, 255, 0);
     stroke-width: 4px;
 }
 .dragging { 
@@ -24,8 +23,8 @@ body, html {
 }
 .token { 
     z-index: 5;
-    stroke: rgb(255, 0, 0); 
-    stroke-width: 2px;     
+     
+        
 }
 
 

@@ -129,8 +129,12 @@ class Token {
     //setting border colors
     set_border(inner_color, outer_color) {
         console.log("setting border");
-        //woot = this.element_parent.getComputedStyle(this._element_circle_0);
-        //console.log(woot);
+        //var woot = window.getComputedStyle(this._element_circle_0).stroke; 
+        var stroke_width = 3;
+        this.element_circle_0.style.setProperty("stroke-width", stroke_width + "px");
+        this.element_circle_1.style.setProperty("stroke-width", Number(stroke_width / 3) + "px");
+        this.element_circle_0.style.setProperty("stroke", "rgb(" + outer_color[0] + "," + outer_color[1] + "," + outer_color[2] + ")");
+        this.element_circle_1.style.setProperty("stroke", "rgb(" + inner_color[0] + "," + inner_color[1] + "," + inner_color[2] + ")");
 
     }
 }
@@ -271,11 +275,9 @@ board_svg.addEventListener("contextmenu", (event) => event.preventDefault()); //
 //creating tokens
 
 let new_element3 = document.getElementsByClassName("token")[0];
-
-
 let new_token3 = new Token("really large token", new_element3, 400, 400);
 new_token3.make_draggable();
-new_token3.set_border([255,0,0],[0,255,0]);
+new_token3.set_border([60, 60, 60],[78, 78, 78]);
 
 
 
