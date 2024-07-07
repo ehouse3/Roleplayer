@@ -13,8 +13,8 @@ class Token {
         this._name = name;
 
         this._element_parent = element_parent;
-        this._element_circle_0 = element_parent.children[0];
-        this._element_circle_1 = element_parent.children[1];
+        this._element_circle_0 = element_parent.children[0]; //first circle
+        this._element_circle_1 = element_parent.children[1]; //second circle
 
         this._cur_x = cur_x;
         this._cur_y = cur_y;
@@ -130,9 +130,11 @@ class Token {
     set_border(inner_color, outer_color) {
         console.log("setting border");
         //var woot = window.getComputedStyle(this._element_circle_0).stroke; 
+        //setting width
         var stroke_width = 3;
         this.element_circle_0.style.setProperty("stroke-width", stroke_width + "px");
         this.element_circle_1.style.setProperty("stroke-width", Number(stroke_width / 3) + "px");
+        //setting color
         this.element_circle_0.style.setProperty("stroke", "rgb(" + outer_color[0] + "," + outer_color[1] + "," + outer_color[2] + ")");
         this.element_circle_1.style.setProperty("stroke", "rgb(" + inner_color[0] + "," + inner_color[1] + "," + inner_color[2] + ")");
 
@@ -141,7 +143,7 @@ class Token {
 //END OF TOKEN CLASS/////////////////////////////////////////////////////////////////////////////////////
 
 //navbar
-console.log("loading script...");
+//console.log("loading script...");
 function home_button() {
     console.log("loading home page...");
 }
@@ -164,7 +166,7 @@ function move_navbar_button() {
         var amount = navbar_width - minimize_navbar_width - minimize_navbar_seperator_width;
 
         navbar.style.setProperty("margin-left", "-" + amount + "px");
-        minimize_navbar_inner.innerHTML = "&gt"
+        minimize_navbar_inner.innerHTML = "&gt";
         minimized = true;
     } else { //return margin-left to 0px
         navbar.style.setProperty("margin-left", "0px");
@@ -264,20 +266,68 @@ function move_pan(event) { //panning on mouse movement event handler
         board_container.scrollBy(-1 * Number(event.movementX) * (100/zoom_slider.value), -1 * Number(event.movementY) * (100/zoom_slider.value))
     }
 }
+board_container.addEventListener('pointerdown', start_pan);
+board_container.addEventListener('pointerup', end_pan);
+board_container.addEventListener('pointercancel', end_pan);
+board_container.addEventListener('pointermove', move_pan);
+board_container.addEventListener("contextmenu", (event) => event.preventDefault()); //prevent the right click contextmenu from opening on the gameboard
 
-board_svg.addEventListener('pointerdown', start_pan);
-board_svg.addEventListener('pointerup', end_pan);
-board_svg.addEventListener('pointercancel', end_pan);
-board_svg.addEventListener('pointermove', move_pan);
-board_svg.addEventListener("contextmenu", (event) => event.preventDefault()); //prevent the right click contextmenu from opening on the gameboard
+//multi-selection
+var selecting = false;
+var start_x = 0;
+var start_y = 0;
+var selector_element = document.getElementById("selector");
+function start_select(event) { //consider rewriting using getscreenctm
+    if(event.button !== 0) return;
+    selecting = true;
+    start_x = event.clientX + board_container.scrollLeft - 800;
+    start_y = event.clientY + board_container.scrollTop - 800;
+    selector_element.setAttribute("x", start_x); //fix zoom functionality
+    selector_element.setAttribute("y", start_y);
+    console.log(start_x);
+}
+function move_select(event) {
+    if(!selecting) return;
+    cur_x = event.clientX + board_container.scrollLeft - 800;
+    cur_y = event.clientY + board_container.scrollTop - 800;
+    //need to adjust either width or x
+    console.log("start_x: " + start_x + " cur_x: " + cur_x);
+    if(cur_x > start_x) { 
+        selector_element.setAttribute("width", Number(cur_x - start_x) + "px");
+    } else {
+        selector_element.setAttribute("width", Number(start_x - cur_x) + "px");  
+        selector_element.setAttribute("x", cur_x + "px");
+    }
+    //need to adjust either height or y
+    if(cur_y > start_y) {
+        selector_element.setAttribute("height", Number(cur_y - start_y) + "px");
+    } else {
+        selector_element.setAttribute("height", Number(start_y - cur_y) + "px");  
+        selector_element.setAttribute("y", cur_y + "px");
+    }
 
+}
+function end_select(event) {
+    selecting = false;
+    cur_x = 0;
+    cur_y = 0;
+    selector_element.setAttribute("width", "");
+    selector_element.setAttribute("height", "");
+    selector_element.setAttribute("x", "");
+    selector_element.setAttribute("y", "");
+}
+
+board_container.addEventListener('pointerdown', start_select);
+board_container.addEventListener('pointerup', end_select);
+board_container.addEventListener('pointercancel', end_select);
+board_container.addEventListener('pointermove', move_select);
 
 //creating tokens
-
 let new_element3 = document.getElementsByClassName("token")[0];
 let new_token3 = new Token("really large token", new_element3, 400, 400);
 new_token3.make_draggable();
 new_token3.set_border([60, 60, 60],[78, 78, 78]);
+
 
 
 

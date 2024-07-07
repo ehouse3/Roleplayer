@@ -161,3 +161,13 @@ body, html {
 }
 /*end zoom slider*/
 
+/*selector*/
+#selector {
+    opacity: 50%;
+    fill: lightblue;
+    stroke: blue;
+    stroke-width: 2px;
+    
+}
+/*end selector*/
+
