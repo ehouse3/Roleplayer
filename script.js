@@ -277,37 +277,40 @@ var selecting = false;
 var start_x = 0;
 var start_y = 0;
 var selector_element = document.getElementById("selector");
-function start_select(event) { //consider rewriting using getscreenctm
+function start_select(event) { //selection start handler
+    //consider rewriting using getscreenctm
     if(event.button !== 0) return;
     selecting = true;
     start_x = event.clientX + board_container.scrollLeft - 800;
     start_y = event.clientY + board_container.scrollTop - 800;
     selector_element.setAttribute("x", start_x); //fix zoom functionality
     selector_element.setAttribute("y", start_y);
-    console.log(start_x);
 }
-function move_select(event) {
+function move_select(event) { //selection move handler
     if(!selecting) return;
     cur_x = event.clientX + board_container.scrollLeft - 800;
     cur_y = event.clientY + board_container.scrollTop - 800;
     //need to adjust either width or x
     console.log("start_x: " + start_x + " cur_x: " + cur_x);
     if(cur_x > start_x) { 
-        selector_element.setAttribute("width", Number(cur_x - start_x) + "px");
+        selector_element.setAttribute("width", cur_x - start_x + "px");
+        selector_element.setAttribute("x", start_x + "px");
     } else {
-        selector_element.setAttribute("width", Number(start_x - cur_x) + "px");  
+        selector_element.setAttribute("width", start_x - cur_x + "px");  
         selector_element.setAttribute("x", cur_x + "px");
     }
     //need to adjust either height or y
     if(cur_y > start_y) {
-        selector_element.setAttribute("height", Number(cur_y - start_y) + "px");
+        selector_element.setAttribute("height", cur_y - start_y + "px");
+        selector_element.setAttribute("y", start_y);
     } else {
-        selector_element.setAttribute("height", Number(start_y - cur_y) + "px");  
+        selector_element.setAttribute("height", start_y - cur_y + "px");  
         selector_element.setAttribute("y", cur_y + "px");
     }
+    
 
 }
-function end_select(event) {
+function end_select(event) { //selection end handler
     selecting = false;
     cur_x = 0;
     cur_y = 0;
@@ -317,6 +320,7 @@ function end_select(event) {
     selector_element.setAttribute("y", "");
 }
 
+//binding handlers
 board_container.addEventListener('pointerdown', start_select);
 board_container.addEventListener('pointerup', end_select);
 board_container.addEventListener('pointercancel', end_select);
