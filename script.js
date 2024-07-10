@@ -26,7 +26,7 @@ class Token {
         
         this.set_position(cur_x, cur_y); //called in constructor to update the start position
         this.dragging = null; //currently dragging
-        this.selected = false;
+        this._selected = false;
     }
     //getter functions
     get name() { return this._name; }
@@ -36,11 +36,13 @@ class Token {
     get width() { return this._width; }
     get cur_x() { return this._cur_x; }
     get cur_y() { return this._cur_y; }
+    get selected() { return this._selected; }
 
     //setter functions
     set cur_x(new_x) { this._cur_x = new_x; }
     set cur_y(new_y) { this._cur_y = new_y; }
     set name(new_name) { this._name = new_name; }
+    set selected(new_selected) { this._selected = new_selected; }
     set_position(new_x, new_y) {
         grid_width = 2000;
         grid_height = 1000;
@@ -83,45 +85,43 @@ class Token {
     //add functionality to make_draggable() that, if token is_selected, will allow movement based on the mouse.
     //
     //
+    event_to_svg_coordinates = (event, el=event.currentTarget) => {//converts event's argument coordinates to svg coordinates
+        const svg = el.ownerSVGElement;
+        let p = svg.createSVGPoint();
+        p.x = event.clientX;
+        p.y = event.clientY;
+
+        p = p.matrixTransform(svg.getScreenCTM().inverse());
+        return p;
+    }
+
+    start_drag = (event) => { //starting dragging event handler*
+        if (event.button !== 0) return; //on left click
+        let {x, y} = this.event_to_svg_coordinates(event);
+        this.dragging = {dx: this.cur_x - x, dy: this.cur_y - y};
+        this.element_parent.classList.add('dragging');
+        this.element_parent.setPointerCapture(event.pointerId);
+    }
+
+    move_drag = (event) => { //dragging on mouse move event handler
+        if (!this.dragging) return;
+        let {x, y} = this.event_to_svg_coordinates(event);
+        this.set_position(x + this.dragging.dx, y + this.dragging.dy);
+    }
+
+    end_drag = (_event) => { //ending drag event handler
+        this.dragging = null;
+        this.element_parent.classList.remove('dragging');
+    }
+
     make_draggable() {
         console.log("adding dragability to " + this.name);
-        //pass in an instance of the class to fix scope
-        var _this = this;
-
-        function event_to_svg_coordinates(event, el=event.currentTarget) {//converts event's argument coordinates to svg coordinates
-            const svg = el.ownerSVGElement;
-            let p = svg.createSVGPoint();
-            p.x = event.clientX;
-            p.y = event.clientY;
-
-            p = p.matrixTransform(svg.getScreenCTM().inverse());
-            return p;
-        }
-
-        function start_drag(event) { //starting dragging event handler
-            if (event.button !== 0) return; //on left click
-            let {x, y} = event_to_svg_coordinates(event);
-            _this.dragging = {dx: _this.cur_x - x, dy: _this.cur_y - y};
-            _this.element_parent.classList.add('dragging');
-            _this.element_parent.setPointerCapture(event.pointerId);
-        }
-
-        function move_drag(event) { //dragging on mouse move event handler
-            if (!_this.dragging) return;
-            let {x, y} = event_to_svg_coordinates(event);
-            _this.set_position(x + _this.dragging.dx, y + _this.dragging.dy);
-        }
-
-        function end_drag(_event) { //ending drag event handler
-            _this.dragging = null;
-            _this.element_parent.classList.remove('dragging');
-        }
 
         //binding handlers
-        this.element_parent.addEventListener('pointerdown', start_drag);
-        this.element_parent.addEventListener('pointerup', end_drag);
-        this.element_parent.addEventListener('pointercancel', end_drag);
-        this.element_parent.addEventListener('pointermove', move_drag);
+        this.element_parent.addEventListener('pointerdown', this.start_drag);
+        this.element_parent.addEventListener('pointerup', this.end_drag);
+        this.element_parent.addEventListener('pointercancel', this.end_drag);
+        this.element_parent.addEventListener('pointermove', this.move_drag);
         this.element_parent.addEventListener('touchstart', (event) => event.preventDefault());
     }
 
@@ -281,7 +281,7 @@ board_container.addEventListener('pointermove', move_pan);
 board_container.addEventListener("contextmenu", (event) => event.preventDefault()); //prevent the right click contextmenu from opening on the gameboard
 
 //box-selection
-var selecting = false;
+var box_selecting = false;
 var start_x = 0;
 var start_y = 0;
 var selector_element = document.getElementById("selector");
@@ -290,14 +290,14 @@ function start_select(event) { //selection start handler
     if(event.button !== 0) return; //mouse 0 only
     if(event.target.parentElement.classList.contains("token")) return; //will not box select on a token piece
 
-    selecting = true;
+    box_selecting = true;
     start_x = event.clientX + board_container.scrollLeft - 800;
     start_y = event.clientY + board_container.scrollTop - 800;
     selector_element.setAttribute("x", start_x); //fix zoom functionality
     selector_element.setAttribute("y", start_y);
 }
 function move_select(event) { //selection move handler
-    if(!selecting) return;
+    if(!box_selecting) return;
     cur_x = event.clientX + board_container.scrollLeft - 800;
     cur_y = event.clientY + board_container.scrollTop - 800;
     
@@ -321,7 +321,12 @@ function move_select(event) { //selection move handler
 
 }
 function end_select(event) { //selection end handler
-    selecting = false;
+    //create function to find all elements in selector_element, and set 'selected' instance var for each token to true.
+    if(!box_selecting) return;
+    //console.log(event);
+    console.log(selector_element);
+    box_selecting = false;
+    
     cur_x = 0;
     cur_y = 0;
     selector_element.setAttribute("width", "");
@@ -336,12 +341,21 @@ board_container.addEventListener('pointerup', end_select);
 board_container.addEventListener('pointercancel', end_select);
 board_container.addEventListener('pointermove', move_select);
 
+
+
 //creating tokens
 let new_element = document.getElementsByClassName("token")[0];
 let new_token = new Token("really large token", new_element, 400, 400);
 tokens_list.push(new_token)
 new_token.make_draggable();
 new_token.set_border([60, 60, 60],[78, 78, 78]);
+
+let new_element2 = document.getElementsByClassName("token")[1];
+let new_token2 = new Token("really large token2", new_element2, 600, 600);
+tokens_list.push(new_token2)
+new_token2.make_draggable();
+new_token2.set_border([60, 60, 60],[78, 78, 78]);
+
 
 
 
