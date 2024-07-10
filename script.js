@@ -280,15 +280,16 @@ board_container.addEventListener('pointercancel', end_pan);
 board_container.addEventListener('pointermove', move_pan);
 board_container.addEventListener("contextmenu", (event) => event.preventDefault()); //prevent the right click contextmenu from opening on the gameboard
 
-//multi-selection
+//box-selection
 var selecting = false;
 var start_x = 0;
 var start_y = 0;
 var selector_element = document.getElementById("selector");
 function start_select(event) { //selection start handler
     //consider rewriting using getscreenctm
-    if(event.button !== 0) return;
-    console.log(event.target);
+    if(event.button !== 0) return; //mouse 0 only
+    if(event.target.parentElement.classList.contains("token")) return; //will not box select on a token piece
+
     selecting = true;
     start_x = event.clientX + board_container.scrollLeft - 800;
     start_y = event.clientY + board_container.scrollTop - 800;
@@ -308,7 +309,7 @@ function move_select(event) { //selection move handler
         selector_element.setAttribute("width", start_x - cur_x + "px");  
         selector_element.setAttribute("x", cur_x + "px");
     }
-    //need to adjust either height or y
+
     if(cur_y > start_y) {
         selector_element.setAttribute("height", cur_y - start_y + "px");
         selector_element.setAttribute("y", start_y);
