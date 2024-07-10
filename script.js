@@ -26,6 +26,7 @@ class Token {
         
         this.set_position(cur_x, cur_y); //called in constructor to update the start position
         this.dragging = null; //currently dragging
+        this.selected = false;
     }
     //getter functions
     get name() { return this._name; }
@@ -79,6 +80,9 @@ class Token {
 
     //https://www.redblobgames.com/making-of/draggable/examples.html
     //draggability handler
+    //add functionality to make_draggable() that, if token is_selected, will allow movement based on the mouse.
+    //
+    //
     make_draggable() {
         console.log("adding dragability to " + this.name);
         //pass in an instance of the class to fix scope
@@ -89,6 +93,7 @@ class Token {
             let p = svg.createSVGPoint();
             p.x = event.clientX;
             p.y = event.clientY;
+
             p = p.matrixTransform(svg.getScreenCTM().inverse());
             return p;
         }
@@ -101,15 +106,15 @@ class Token {
             _this.element_parent.setPointerCapture(event.pointerId);
         }
 
-        function end_drag(_event) { //ending drag event handler
-            _this.dragging = null;
-            _this.element_parent.classList.remove('dragging');
-        }
-
         function move_drag(event) { //dragging on mouse move event handler
             if (!_this.dragging) return;
             let {x, y} = event_to_svg_coordinates(event);
             _this.set_position(x + _this.dragging.dx, y + _this.dragging.dy);
+        }
+
+        function end_drag(_event) { //ending drag event handler
+            _this.dragging = null;
+            _this.element_parent.classList.remove('dragging');
         }
 
         //binding handlers
@@ -190,6 +195,9 @@ var body = document.getElementById("body");
 board_svg.setAttribute('width',grid_width);
 board_svg.setAttribute('height',grid_height);
 board_svg.setAttribute('viewBox','0 0 ' + grid_width + ' ' + grid_height);
+
+var tokens_list = []; //list of moveable/selectable tokens
+var selected_tokens_list = []; //list of currently selected tokens
 
 //zoom functions
 var cur_board_width = board_container.offsetWidth;
@@ -280,6 +288,7 @@ var selector_element = document.getElementById("selector");
 function start_select(event) { //selection start handler
     //consider rewriting using getscreenctm
     if(event.button !== 0) return;
+    console.log(event.target);
     selecting = true;
     start_x = event.clientX + board_container.scrollLeft - 800;
     start_y = event.clientY + board_container.scrollTop - 800;
@@ -290,8 +299,8 @@ function move_select(event) { //selection move handler
     if(!selecting) return;
     cur_x = event.clientX + board_container.scrollLeft - 800;
     cur_y = event.clientY + board_container.scrollTop - 800;
-    //need to adjust either width or x
-    console.log("start_x: " + start_x + " cur_x: " + cur_x);
+    
+    //console.log("start_x: " + start_x + " cur_x: " + cur_x);
     if(cur_x > start_x) { 
         selector_element.setAttribute("width", cur_x - start_x + "px");
         selector_element.setAttribute("x", start_x + "px");
@@ -307,7 +316,7 @@ function move_select(event) { //selection move handler
         selector_element.setAttribute("height", start_y - cur_y + "px");  
         selector_element.setAttribute("y", cur_y + "px");
     }
-    
+
 
 }
 function end_select(event) { //selection end handler
@@ -327,10 +336,11 @@ board_container.addEventListener('pointercancel', end_select);
 board_container.addEventListener('pointermove', move_select);
 
 //creating tokens
-let new_element3 = document.getElementsByClassName("token")[0];
-let new_token3 = new Token("really large token", new_element3, 400, 400);
-new_token3.make_draggable();
-new_token3.set_border([60, 60, 60],[78, 78, 78]);
+let new_element = document.getElementsByClassName("token")[0];
+let new_token = new Token("really large token", new_element, 400, 400);
+tokens_list.push(new_token)
+new_token.make_draggable();
+new_token.set_border([60, 60, 60],[78, 78, 78]);
 
 
 
