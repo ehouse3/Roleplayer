@@ -82,9 +82,6 @@ class Token {
 
     //https://www.redblobgames.com/making-of/draggable/examples.html
     //draggability handler
-    //add functionality to make_draggable() that, if token is_selected, will allow movement based on the mouse.
-    //
-    //
     event_to_svg_coordinates = (event, el=event.currentTarget) => {//converts event's argument coordinates to svg coordinates
         const svg = el.ownerSVGElement;
         let p = svg.createSVGPoint();
@@ -96,7 +93,9 @@ class Token {
     }
 
     start_drag = (event) => { //starting dragging event handler*
+        console.log("woot");
         if (event.button !== 0) return; //on left click
+        console.log("woot2");
         let {x, y} = this.event_to_svg_coordinates(event);
         this.dragging = {dx: this.cur_x - x, dy: this.cur_y - y};
         this.element_parent.classList.add('dragging');
@@ -288,7 +287,12 @@ var selector_element = document.getElementById("selector");
 function start_select(event) { //selection start handler
     //consider rewriting using getscreenctm
     if(event.button !== 0) return; //mouse 0 only
-    if(event.target.parentElement.classList.contains("token")) return; //will not box select on a token piece
+    selected_tokens_list = [];
+    if(event.target.parentElement.classList.contains("token")) { //will not box select on a token piece
+        //selected_tokens_list = [event.target.parentElement]; //fix to add Token object not element
+        return;
+    }  
+
 
     box_selecting = true;
     start_x = event.clientX + board_container.scrollLeft - 800;
@@ -309,7 +313,7 @@ function move_select(event) { //selection move handler
         selector_element.setAttribute("width", start_x - cur_x + "px");  
         selector_element.setAttribute("x", cur_x + "px");
     }
-
+  
     if(cur_y > start_y) {
         selector_element.setAttribute("height", cur_y - start_y + "px");
         selector_element.setAttribute("y", start_y);
@@ -323,10 +327,30 @@ function move_select(event) { //selection move handler
 function end_select(event) { //selection end handler
     //create function to find all elements in selector_element, and set 'selected' instance var for each token to true.
     if(!box_selecting) return;
-    //console.log(event);
-    console.log(selector_element);
+    console.log(start_x + " : " + cur_x);
+    console.log(start_y + " : " + cur_y);
+
+    //itterates through all tokens, and if their position is inside the selection_box, add Token to selected_token_list
+    for(let token = 0; token < tokens_list.length; token++) { 
+        if(tokens_list[token].cur_x < cur_x && tokens_list[token].cur_x > start_x && tokens_list[token].cur_x < cur_y && tokens_list[token].cur_y > start_y) {
+            selected_tokens_list.push(tokens_list[token]);
+        } else if(tokens_list[token].cur_x > cur_x && tokens_list[token].cur_x < start_x && tokens_list[token].cur_x > cur_y && tokens_list[token].cur_y < start_y) {
+            selected_tokens_list.push(tokens_list[token]);
+        }
+    }
+    //console.log(selected_tokens_list);
+    //pass the start_drag function to the handler to force it to start (create 'event' arg including cursor pos)
+    //
+    if(selected_tokens_list.length > 0) {
+        let pp = {
+            button: 0,
+            clientX: event.clientX,
+            clientY: event.clientY
+        };
+        selected_tokens_list[0].start_drag(pp);
+    }
+
     box_selecting = false;
-    
     cur_x = 0;
     cur_y = 0;
     selector_element.setAttribute("width", "");
