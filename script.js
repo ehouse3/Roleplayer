@@ -6,9 +6,9 @@ class Token {
     element: html element
     cur_x: current x coordinate
     cur_y: current y coordinate
-
+    width: 
     */
-    constructor(name = '(no name given)', element_parent, cur_x=0, cur_y=0, width) {
+    constructor(name = '(no name given)', element_parent, cur_x=0, cur_y=0, width, unique_id) {
         //uses _var naming scheme to prevent idefinite recursive calls
         this._name = name;
 
@@ -20,9 +20,15 @@ class Token {
         this._cur_y = cur_y;
         if(width) { 
             this._width = width;
+            this.element_circle_0.setAttribute("r", Number(this.width / 2) + "px");
+            this.element_circle_1.setAttribute("r", Number(this.width / 2) + "px");
         } else {
-            this._width = this.element_circle_0.getAttribute("r");
+            //this._width = this.element_circle_0.getAttribute("r");
+            console.log();
         }
+
+        this._unique_id = unique_id;
+        this.element_parent.id = this.unique_id;
         
         this.set_position(cur_x, cur_y); //called in constructor to update the start position
         this.dragging = null; //currently dragging
@@ -37,6 +43,7 @@ class Token {
     get cur_x() { return this._cur_x; }
     get cur_y() { return this._cur_y; }
     get selected() { return this._selected; }
+    get unique_id() { return this._unique_id; }
 
     //setter functions
     set cur_x(new_x) { this._cur_x = new_x; }
@@ -48,8 +55,8 @@ class Token {
         grid_height = 1000;
 
         //fix grid length and height for this
-        this.cur_x = snap_to_grid(clamp(new_x, this.width, grid_width - this.width), 12, this.width);
-        this.cur_y = snap_to_grid(clamp(new_y, this.width, grid_height - this.width), 12, this.width);
+        this.cur_x = snap_to_grid(clamp(new_x, (this.width / 2), grid_width - (this.width / 2)), 12, (this.width / 2));
+        this.cur_y = snap_to_grid(clamp(new_y, (this.width / 2), grid_height - (this.width / 2)), 12, (this.width / 2));
 
         //console.log("cur x : " + this.cur_x + " cur y : " + this.cur_y);
 
@@ -83,19 +90,17 @@ class Token {
     //https://www.redblobgames.com/making-of/draggable/examples.html
     //draggability handler
     event_to_svg_coordinates = (event, el=event.currentTarget) => {//converts event's argument coordinates to svg coordinates
-        const svg = el.ownerSVGElement;
+        const svg = this.element_parent.parentElement;
         let p = svg.createSVGPoint();
         p.x = event.clientX;
         p.y = event.clientY;
-
         p = p.matrixTransform(svg.getScreenCTM().inverse());
         return p;
     }
 
-    start_drag = (event) => { //starting dragging event handler*
-        console.log("woot");
+    start_drag = (event) => { //starting dragging event handler
         if (event.button !== 0) return; //on left click
-        console.log("woot2");
+        if (event.target.parentElement.id != this.unique_id) return; //check if unique id doesnt match that of element clicked (needed because handler bound to gameboard)
         let {x, y} = this.event_to_svg_coordinates(event);
         this.dragging = {dx: this.cur_x - x, dy: this.cur_y - y};
         this.element_parent.classList.add('dragging');
@@ -117,11 +122,11 @@ class Token {
         console.log("adding dragability to " + this.name);
 
         //binding handlers
-        this.element_parent.addEventListener('pointerdown', this.start_drag);
-        this.element_parent.addEventListener('pointerup', this.end_drag);
-        this.element_parent.addEventListener('pointercancel', this.end_drag);
-        this.element_parent.addEventListener('pointermove', this.move_drag);
-        this.element_parent.addEventListener('touchstart', (event) => event.preventDefault());
+        this.element_parent.parentElement.addEventListener('pointerdown', this.start_drag);
+        this.element_parent.parentElement.addEventListener('pointerup', this.end_drag);
+        this.element_parent.parentElement.addEventListener('pointercancel', this.end_drag);
+        this.element_parent.parentElement.addEventListener('pointermove', this.move_drag);
+        this.element_parent.parentElement.addEventListener('touchstart', (event) => event.preventDefault());
     }
 
     remove_draggable() { 
@@ -341,6 +346,7 @@ function end_select(event) { //selection end handler
     //console.log(selected_tokens_list);
     //pass the start_drag function to the handler to force it to start (create 'event' arg including cursor pos)
     //
+    /*
     if(selected_tokens_list.length > 0) {
         let pp = {
             button: 0,
@@ -349,7 +355,7 @@ function end_select(event) { //selection end handler
         };
         selected_tokens_list[0].start_drag(pp);
     }
-
+    */
     box_selecting = false;
     cur_x = 0;
     cur_y = 0;
@@ -369,13 +375,13 @@ board_container.addEventListener('pointermove', move_select);
 
 //creating tokens
 let new_element = document.getElementsByClassName("token")[0];
-let new_token = new Token("really large token", new_element, 400, 400);
+let new_token = new Token("really large token", new_element, 400, 400, 24, "a");
 tokens_list.push(new_token)
 new_token.make_draggable();
 new_token.set_border([60, 60, 60],[78, 78, 78]);
 
 let new_element2 = document.getElementsByClassName("token")[1];
-let new_token2 = new Token("really large token2", new_element2, 600, 600);
+let new_token2 = new Token("really large token2", new_element2, 600, 600, 48, "b");
 tokens_list.push(new_token2)
 new_token2.make_draggable();
 new_token2.set_border([60, 60, 60],[78, 78, 78]);
