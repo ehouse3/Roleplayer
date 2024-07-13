@@ -33,6 +33,8 @@ class Token {
         this.set_position(cur_x, cur_y); //called in constructor to update the start position
         this.dragging = null; //currently dragging
         this._selected = false;
+        this.previous_border_0 = '';
+        this.previous_border_1 = '';
     }
     //getter functions
     get name() { return this._name; }
@@ -49,7 +51,22 @@ class Token {
     set cur_x(new_x) { this._cur_x = new_x; }
     set cur_y(new_y) { this._cur_y = new_y; }
     set name(new_name) { this._name = new_name; }
-    set selected(new_selected) { this._selected = new_selected; }
+    set selected(new_selected) { //replace all with filter w/ hue rotate and a sepperate css class
+        if(this.selected == false && new_selected == true) {
+            this.previous_border_0 = this.element_circle_0.style.getPropertyValue("stroke");
+            this.previous_border_1 = this.element_circle_1.style.getPropertyValue("stroke");
+            console.log(this.previous_border_0 + " " + this.previous_border_1);
+            
+            this.element_circle_0.style.setProperty("stroke", "rgb(50, 50, 177)");
+            this.element_circle_1.style.setProperty("stroke", "rgb(35, 35, 150)");
+        } else {
+            this.element_circle_0.style.setProperty("stroke", this.previous_border_0);
+            this.element_circle_1.style.setProperty("stroke", this.previous_border_1);
+            this.previous_border_0 = '';
+            this.previous_border_1 = '';
+        }
+        this._selected = new_selected; 
+    }
     set_position(new_x, new_y) {
         grid_width = 2000;
         grid_height = 1000;
@@ -334,12 +351,9 @@ function move_select(event) { //selection move handler
 function end_select(event) { //selection end handler
     //create function to find all elements in selector_element, and set 'selected' instance var for each token to true.
     if(!box_selecting) return;
-    console.log("start " + start_x + " : curx " + cur_x);
-    console.log("start " + start_y + " : cury " + cur_y);
-    console.log();
     //itterates through all tokens, and if their position is inside the selection_box, add Token to selected_tokens_list
     for(let token_i = 0; token_i < tokens_list.length; token_i++) { 
-        console.log("TOKEN: curx " + tokens_list[token_i].cur_x + " cury " + tokens_list[token_i].cur_y);
+        //console.log("TOKEN: curx " + tokens_list[token_i].cur_x + " cury " + tokens_list[token_i].cur_y);
         if(cur_x != 0 && cur_y != 0){ //cursor moved at least once
             //each statement corresponds to the selection-box mouse moving towards a quadrant.
             if((tokens_list[token_i].cur_x < cur_x && tokens_list[token_i].cur_x > start_x) && (tokens_list[token_i].cur_x < cur_y && tokens_list[token_i].cur_y > start_y)) { //bottom-right
@@ -353,9 +367,9 @@ function end_select(event) { //selection end handler
             }
         }
     }
-    console.log(selected_tokens_list);
     //itterates through selected tokens list and sets all selected to true
     for(let selected_tokens_list_i = 0; selected_tokens_list_i < selected_tokens_list.length; selected_tokens_list_i++) {
+
         selected_tokens_list[selected_tokens_list_i].selected = true;
     }
     
@@ -379,13 +393,13 @@ board_container.addEventListener('pointermove', move_select);
 //creating tokens
 let new_element = document.getElementsByClassName("token")[0];
 let new_token = new Token("really large token", new_element, 400, 400, 24, "a");
-tokens_list.push(new_token)
+tokens_list.push(new_token);
 new_token.make_draggable();
 new_token.set_border([60, 60, 60],[78, 78, 78]);
 
 let new_element2 = document.getElementsByClassName("token")[1];
 let new_token2 = new Token("really large token2", new_element2, 600, 600, 48, "b");
-tokens_list.push(new_token2)
+tokens_list.push(new_token2);
 new_token2.make_draggable();
 new_token2.set_border([60, 60, 60],[78, 78, 78]);
 
