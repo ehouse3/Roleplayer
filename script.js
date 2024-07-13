@@ -100,7 +100,8 @@ class Token {
 
     start_drag = (event) => { //starting dragging event handler
         if (event.button !== 0) return; //on left click
-        if (event.target.parentElement.id != this.unique_id) return; //check if unique id doesnt match that of element clicked (needed because handler bound to gameboard)
+        if (event.target.parentElement.id != this.unique_id && this.selected == false) return; //check if unique id doesnt match that of element clicked (needed because handler bound to gameboard)
+        console.log(this.name + " woot");
         let {x, y} = this.event_to_svg_coordinates(event);
         this.dragging = {dx: this.cur_x - x, dy: this.cur_y - y};
         this.element_parent.classList.add('dragging');
@@ -292,13 +293,14 @@ var selector_element = document.getElementById("selector");
 function start_select(event) { //selection start handler
     //consider rewriting using getscreenctm
     if(event.button !== 0) return; //mouse 0 only
+    //unselects previos tokens
+    for(let selected_tokens_list_i = 0; selected_tokens_list_i < selected_tokens_list.length; selected_tokens_list_i++) {
+        selected_tokens_list[selected_tokens_list_i].selected = false;
+    }
     selected_tokens_list = [];
     if(event.target.parentElement.classList.contains("token")) { //will not box select on a token piece
-        //selected_tokens_list = [event.target.parentElement]; //fix to add Token object not element
         return;
     }  
-
-
     box_selecting = true;
     start_x = event.clientX + board_container.scrollLeft - 800;
     start_y = event.clientY + board_container.scrollTop - 800;
@@ -335,27 +337,20 @@ function end_select(event) { //selection end handler
     console.log(start_x + " : " + cur_x);
     console.log(start_y + " : " + cur_y);
 
-    //itterates through all tokens, and if their position is inside the selection_box, add Token to selected_token_list
-    for(let token = 0; token < tokens_list.length; token++) { 
-        if(tokens_list[token].cur_x < cur_x && tokens_list[token].cur_x > start_x && tokens_list[token].cur_x < cur_y && tokens_list[token].cur_y > start_y) {
-            selected_tokens_list.push(tokens_list[token]);
-        } else if(tokens_list[token].cur_x > cur_x && tokens_list[token].cur_x < start_x && tokens_list[token].cur_x > cur_y && tokens_list[token].cur_y < start_y) {
-            selected_tokens_list.push(tokens_list[token]);
+    //itterates through all tokens, and if their position is inside the selection_box, add Token to selected_tokens_list
+    for(let token_i = 0; token_i < tokens_list.length; token_i++) { 
+        if(tokens_list[token_i].cur_x < cur_x && tokens_list[token_i].cur_x > start_x && tokens_list[token_i].cur_x < cur_y && tokens_list[token_i].cur_y > start_y) {
+            selected_tokens_list.push(tokens_list[token_i]);
+        } else if(tokens_list[token_i].cur_x > cur_x && tokens_list[token_i].cur_x < start_x && tokens_list[token_i].cur_x > cur_y && tokens_list[token_i].cur_y < start_y) {
+            selected_tokens_list.push(tokens_list[token_i]);
         }
     }
-    //console.log(selected_tokens_list);
-    //pass the start_drag function to the handler to force it to start (create 'event' arg including cursor pos)
-    //
-    /*
-    if(selected_tokens_list.length > 0) {
-        let pp = {
-            button: 0,
-            clientX: event.clientX,
-            clientY: event.clientY
-        };
-        selected_tokens_list[0].start_drag(pp);
+    console.log(selected_tokens_list);
+    //itterates through selected tokens list and sets all selected to true
+    for(let selected_tokens_list_i = 0; selected_tokens_list_i < selected_tokens_list.length; selected_tokens_list_i++) {
+        selected_tokens_list[selected_tokens_list_i].selected = true;
     }
-    */
+    
     box_selecting = false;
     cur_x = 0;
     cur_y = 0;
