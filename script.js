@@ -35,6 +35,7 @@ class Token {
         this._selected = false;
         this.previous_border_0 = '';
         this.previous_border_1 = '';
+        this._movement_allowed = true;
     }
     //getter functions
     get name() { return this._name; }
@@ -46,6 +47,7 @@ class Token {
     get cur_y() { return this._cur_y; }
     get selected() { return this._selected; }
     get unique_id() { return this._unique_id; }
+    get movement_allowed() { return this._movement_allowed; }
 
     //setter functions
     set cur_x(new_x) { this._cur_x = new_x; }
@@ -55,7 +57,6 @@ class Token {
         if(this.selected == false && new_selected == true) {
             this.previous_border_0 = this.element_circle_0.style.getPropertyValue("stroke");
             this.previous_border_1 = this.element_circle_1.style.getPropertyValue("stroke");
-            console.log(this.previous_border_0 + " " + this.previous_border_1);
             
             this.element_circle_0.style.setProperty("stroke", "rgb(50, 50, 177)");
             this.element_circle_1.style.setProperty("stroke", "rgb(35, 35, 150)");
@@ -67,6 +68,8 @@ class Token {
         }
         this._selected = new_selected; 
     }
+    prevent_movement() { this._movement_allowed = false; }
+    allow_movement() { this._movement_allowed = true; }
     set_position(new_x, new_y) {
         grid_width = 2000;
         grid_height = 1000;
@@ -118,7 +121,8 @@ class Token {
     start_drag = (event) => { //starting dragging event handler
         if (event.button !== 0) return; //on left click
         if (event.target.parentElement.id != this.unique_id && this.selected == false) return; //check if unique id doesnt match that of element clicked (needed because handler bound to gameboard)
-        console.log(this.name + " woot");
+        console.log(this.movement_allowed);
+        if (!this.movement_allowed) return;
         let {x, y} = this.event_to_svg_coordinates(event);
         this.dragging = {dx: this.cur_x - x, dy: this.cur_y - y};
         this.element_parent.classList.add('dragging');
@@ -127,6 +131,7 @@ class Token {
 
     move_drag = (event) => { //dragging on mouse move event handler
         if (!this.dragging) return;
+        if (!this.movement_allowed) return;
         let {x, y} = this.event_to_svg_coordinates(event);
         this.set_position(x + this.dragging.dx, y + this.dragging.dy);
     }
@@ -306,18 +311,22 @@ board_container.addEventListener("contextmenu", (event) => event.preventDefault(
 var box_selecting = false;
 var start_x = 0;
 var start_y = 0;
+var cur_x = 0;
+var  cur_y = 0;
 var selector_element = document.getElementById("selector");
 function start_select(event) { //selection start handler
     //consider rewriting using getscreenctm
     if(event.button !== 0) return; //mouse 0 only
-    //unselects previos tokens
-    for(let selected_tokens_list_i = 0; selected_tokens_list_i < selected_tokens_list.length; selected_tokens_list_i++) {
+    //unselects previous tokens
+    if(event.target.parentElement.classList.contains("token")) { return; } //will not box select on a token piece
+    for(let selected_tokens_list_i = 0; selected_tokens_list_i < selected_tokens_list.length; selected_tokens_list_i++) { //remove all selected
         selected_tokens_list[selected_tokens_list_i].selected = false;
     }
     selected_tokens_list = [];
-    if(event.target.parentElement.classList.contains("token")) { //will not box select on a token piece
-        return;
-    }  
+    for(let token_i = 0; token_i < tokens_list.length; token_i++) { 
+        tokens_list[token_i].prevent_movement();
+    }
+    
     box_selecting = true;
     start_x = event.clientX + board_container.scrollLeft - 800;
     start_y = event.clientY + board_container.scrollTop - 800;
@@ -351,10 +360,14 @@ function move_select(event) { //selection move handler
 function end_select(event) { //selection end handler
     //create function to find all elements in selector_element, and set 'selected' instance var for each token to true.
     if(!box_selecting) return;
+    console.log("end select")
     //itterates through all tokens, and if their position is inside the selection_box, add Token to selected_tokens_list
-    for(let token_i = 0; token_i < tokens_list.length; token_i++) { 
-        //console.log("TOKEN: curx " + tokens_list[token_i].cur_x + " cury " + tokens_list[token_i].cur_y);
+    for(let token_i = 0; token_i < tokens_list.length; token_i++) {
+        tokens_list[token_i].allow_movement();
         if(cur_x != 0 && cur_y != 0){ //cursor moved at least once
+            console.log("cur_x " + cur_x + "   cur_y " + cur_y);
+            console.log("start_x " + start_x + "   start_y " + start_y);
+            console.log("TOKEN: x " + tokens_list[token_i].cur_x + "   y " + tokens_list[token_i].cur_y + "\n");
             //each statement corresponds to the selection-box mouse moving towards a quadrant.
             if((tokens_list[token_i].cur_x < cur_x && tokens_list[token_i].cur_x > start_x) && (tokens_list[token_i].cur_x < cur_y && tokens_list[token_i].cur_y > start_y)) { //bottom-right
                 selected_tokens_list.push(tokens_list[token_i]);
@@ -367,11 +380,12 @@ function end_select(event) { //selection end handler
             }
         }
     }
+    
     //itterates through selected tokens list and sets all selected to true
     for(let selected_tokens_list_i = 0; selected_tokens_list_i < selected_tokens_list.length; selected_tokens_list_i++) {
-
         selected_tokens_list[selected_tokens_list_i].selected = true;
     }
+    console.log(selected_tokens_list);
     
     box_selecting = false;
     cur_x = 0;
