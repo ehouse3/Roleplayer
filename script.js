@@ -121,7 +121,6 @@ class Token {
     start_drag = (event) => { //starting dragging event handler
         if (event.button !== 0) return; //on left click
         if (event.target.parentElement.id != this.unique_id && this.selected == false) return; //check if unique id doesnt match that of element clicked (needed because handler bound to gameboard)
-        console.log(this.movement_allowed);
         if (!this.movement_allowed) return;
         let {x, y} = this.event_to_svg_coordinates(event);
         this.dragging = {dx: this.cur_x - x, dy: this.cur_y - y};
@@ -323,9 +322,11 @@ function start_select(event) { //selection start handler
         selected_tokens_list[selected_tokens_list_i].selected = false;
     }
     selected_tokens_list = [];
+    /*
     for(let token_i = 0; token_i < tokens_list.length; token_i++) { 
         tokens_list[token_i].prevent_movement();
     }
+    */
     
     box_selecting = true;
     start_x = event.clientX + board_container.scrollLeft - 800;
@@ -360,22 +361,21 @@ function move_select(event) { //selection move handler
 function end_select(event) { //selection end handler
     //create function to find all elements in selector_element, and set 'selected' instance var for each token to true.
     if(!box_selecting) return;
-    console.log("end select")
     //itterates through all tokens, and if their position is inside the selection_box, add Token to selected_tokens_list
     for(let token_i = 0; token_i < tokens_list.length; token_i++) {
         tokens_list[token_i].allow_movement();
         if(cur_x != 0 && cur_y != 0){ //cursor moved at least once
-            console.log("cur_x " + cur_x + "   cur_y " + cur_y);
-            console.log("start_x " + start_x + "   start_y " + start_y);
-            console.log("TOKEN: x " + tokens_list[token_i].cur_x + "   y " + tokens_list[token_i].cur_y + "\n");
+            //console.log("cur_x " + cur_x + "   cur_y " + cur_y);
+            //console.log("start_x " + start_x + "   start_y " + start_y);
+            //console.log("TOKEN: x " + tokens_list[token_i].cur_x + "   y " + tokens_list[token_i].cur_y + "\n");
             //each statement corresponds to the selection-box mouse moving towards a quadrant.
-            if((tokens_list[token_i].cur_x < cur_x && tokens_list[token_i].cur_x > start_x) && (tokens_list[token_i].cur_x < cur_y && tokens_list[token_i].cur_y > start_y)) { //bottom-right
+            if((tokens_list[token_i].cur_x < cur_x && tokens_list[token_i].cur_x > start_x) && (tokens_list[token_i].cur_y < cur_y && tokens_list[token_i].cur_y > start_y)) { //bottom-right
                 selected_tokens_list.push(tokens_list[token_i]);
-            } else if((tokens_list[token_i].cur_x > cur_x && tokens_list[token_i].cur_x < start_x) && (tokens_list[token_i].cur_x < cur_y && tokens_list[token_i].cur_y > start_y)) { //bottom-left
+            } else if((tokens_list[token_i].cur_x > cur_x && tokens_list[token_i].cur_x < start_x) && (tokens_list[token_i].cur_y < cur_y && tokens_list[token_i].cur_y > start_y)) { //bottom-left
                 selected_tokens_list.push(tokens_list[token_i]);
-            } else if((tokens_list[token_i].cur_x < cur_x && tokens_list[token_i].cur_x > start_x) && (tokens_list[token_i].cur_x > cur_y && tokens_list[token_i].cur_y < start_y)) { //top-right
+            } else if((tokens_list[token_i].cur_x < cur_x && tokens_list[token_i].cur_x > start_x) && (tokens_list[token_i].cur_y > cur_y && tokens_list[token_i].cur_y < start_y)) { //top-right
                 selected_tokens_list.push(tokens_list[token_i]);
-            } else if((tokens_list[token_i].cur_x > cur_x && tokens_list[token_i].cur_x < start_x) && (tokens_list[token_i].cur_x > cur_y && tokens_list[token_i].cur_y < start_y)) { //top-left
+            } else if((tokens_list[token_i].cur_x > cur_x && tokens_list[token_i].cur_x < start_x) && (tokens_list[token_i].cur_y > cur_y && tokens_list[token_i].cur_y < start_y)) { //top-left
                 selected_tokens_list.push(tokens_list[token_i]);
             }
         }
@@ -385,7 +385,7 @@ function end_select(event) { //selection end handler
     for(let selected_tokens_list_i = 0; selected_tokens_list_i < selected_tokens_list.length; selected_tokens_list_i++) {
         selected_tokens_list[selected_tokens_list_i].selected = true;
     }
-    console.log(selected_tokens_list);
+    
     
     box_selecting = false;
     cur_x = 0;
