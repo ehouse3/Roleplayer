@@ -316,19 +316,22 @@ var selector_element = document.getElementById("selector");
 function start_select(event) { //selection start handler
     //consider rewriting using getscreenctm
     if(event.button !== 0) return; //mouse 0 only
-    //unselects previous tokens
     if(event.target.parentElement.classList.contains("token")) { return; } //will not box select on a token piece
+
+    //unselects previous tokens & clears selected list
     for(let selected_tokens_list_i = 0; selected_tokens_list_i < selected_tokens_list.length; selected_tokens_list_i++) { //remove all selected
         selected_tokens_list[selected_tokens_list_i].selected = false;
     }
     selected_tokens_list = [];
     
-    for(let token_i = 0; token_i < tokens_list.length; token_i++) { //prevent and remove dragging for all tokens
+    //prevent and remove dragging for all tokens
+    for(let token_i = 0; token_i < tokens_list.length; token_i++) { 
         tokens_list[token_i].prevent_movement();
         tokens_list[token_i].element_parent.classList.remove('dragging'); //forcefully remove dragging because handler still fires...
     }
 
     box_selecting = true;
+    //sets immediate cursor position, adding current screen board location, then adjusting for zoom. (800 is for margin)
     start_x = (event.clientX * 100/cur_zoom_value) + board_container.scrollLeft - 800;
     start_y = (event.clientY * 100/cur_zoom_value) + board_container.scrollTop - 800;
     selector_element.setAttribute("x", start_x); 
@@ -336,10 +339,12 @@ function start_select(event) { //selection start handler
 }
 function move_select(event) { //selection move handler
     if(!box_selecting) return;
+    //selection-box movement starts at cursor
     cur_x = (event.clientX * 100/cur_zoom_value) + board_container.scrollLeft - 800;
     cur_y = (event.clientY * 100/cur_zoom_value) + board_container.scrollTop - 800;
     
-    //console.log("start_x: " + start_x + " cur_x: " + cur_x);
+    //setting front end element size
+    //box element's width created towards the right. If cursor moves left, adjusts the selection box's starting position (x), rather than width
     if(cur_x > start_x) { 
         selector_element.setAttribute("width", cur_x - start_x + "px");
         selector_element.setAttribute("x", start_x + "px");
@@ -347,7 +352,7 @@ function move_select(event) { //selection move handler
         selector_element.setAttribute("width", start_x - cur_x + "px");  
         selector_element.setAttribute("x", cur_x + "px");
     }
-  
+    //box element's height created towards the top. If cursor moves down, adjusts the selection box's starting position (y), rather than height
     if(cur_y > start_y) {
         selector_element.setAttribute("height", cur_y - start_y + "px");
         selector_element.setAttribute("y", start_y);
@@ -363,12 +368,8 @@ function end_select(event) { //selection end handler
     if(!box_selecting) return;
     //itterates through all tokens, and if their position is inside the selection_box, add Token to selected_tokens_list
     for(let token_i = 0; token_i < tokens_list.length; token_i++) {
-        tokens_list[token_i].allow_movement();
         if(cur_x != 0 && cur_y != 0){ //cursor moved at least once
-            //console.log("cur_x " + cur_x + "   cur_y " + cur_y);
-            //console.log("start_x " + start_x + "   start_y " + start_y);
-            //console.log("TOKEN: x " + tokens_list[token_i].cur_x + "   y " + tokens_list[token_i].cur_y + "\n");
-            //each statement corresponds to the selection-box mouse moving towards a quadrant.
+            //each statement corresponds to the selection-box mouse moving towards a quadrant. 
             if((tokens_list[token_i].cur_x < cur_x && tokens_list[token_i].cur_x > start_x) && (tokens_list[token_i].cur_y < cur_y && tokens_list[token_i].cur_y > start_y)) { //bottom-right
                 selected_tokens_list.push(tokens_list[token_i]);
             } else if((tokens_list[token_i].cur_x > cur_x && tokens_list[token_i].cur_x < start_x) && (tokens_list[token_i].cur_y < cur_y && tokens_list[token_i].cur_y > start_y)) { //bottom-left
@@ -379,14 +380,16 @@ function end_select(event) { //selection end handler
                 selected_tokens_list.push(tokens_list[token_i]);
             }
         }
+        tokens_list[token_i].allow_movement();
     }
     
     //itterates through selected tokens list and sets all selected to true
     for(let selected_tokens_list_i = 0; selected_tokens_list_i < selected_tokens_list.length; selected_tokens_list_i++) {
         selected_tokens_list[selected_tokens_list_i].selected = true;
     }
-    
-    
+    //console.log("current selected: " + selected_tokens_list);
+
+    //reseting all variables for next box-selection
     box_selecting = false;
     cur_x = 0;
     cur_y = 0;
