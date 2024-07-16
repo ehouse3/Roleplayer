@@ -322,12 +322,12 @@ function start_select(event) { //selection start handler
         selected_tokens_list[selected_tokens_list_i].selected = false;
     }
     selected_tokens_list = [];
-    /*
-    for(let token_i = 0; token_i < tokens_list.length; token_i++) { 
-        tokens_list[token_i].prevent_movement();
-    }
-    */
     
+    for(let token_i = 0; token_i < tokens_list.length; token_i++) { //prevent and remove dragging for all tokens
+        tokens_list[token_i].prevent_movement();
+        tokens_list[token_i].element_parent.classList.remove('dragging'); //forcefully remove dragging because handler still fires...
+    }
+
     box_selecting = true;
     start_x = event.clientX + board_container.scrollLeft - 800;
     start_y = event.clientY + board_container.scrollTop - 800;
