@@ -329,15 +329,15 @@ function start_select(event) { //selection start handler
     }
 
     box_selecting = true;
-    start_x = event.clientX + board_container.scrollLeft - 800;
-    start_y = event.clientY + board_container.scrollTop - 800;
-    selector_element.setAttribute("x", start_x); //fix zoom functionality
+    start_x = (event.clientX * 100/cur_zoom_value) + board_container.scrollLeft - 800;
+    start_y = (event.clientY * 100/cur_zoom_value) + board_container.scrollTop - 800;
+    selector_element.setAttribute("x", start_x); 
     selector_element.setAttribute("y", start_y);
 }
 function move_select(event) { //selection move handler
     if(!box_selecting) return;
-    cur_x = event.clientX + board_container.scrollLeft - 800;
-    cur_y = event.clientY + board_container.scrollTop - 800;
+    cur_x = (event.clientX * 100/cur_zoom_value) + board_container.scrollLeft - 800;
+    cur_y = (event.clientY * 100/cur_zoom_value) + board_container.scrollTop - 800;
     
     //console.log("start_x: " + start_x + " cur_x: " + cur_x);
     if(cur_x > start_x) { 
