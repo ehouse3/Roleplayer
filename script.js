@@ -36,6 +36,12 @@ class Token {
         this.previous_border_0 = '';
         this.previous_border_1 = '';
         this._movement_allowed = true;
+
+        //token game stats
+        this.health = 0;
+        this.mana = 0;
+        this.armor = 0;
+        this.speed = 0;
     }
     //getter functions
     get name() { return this._name; }
@@ -187,10 +193,10 @@ var navbar = document.getElementById("navbar");
 var minimize_navbar = document.getElementsByClassName("minimize_navbar")[0];
 var minimize_navbar_seperator = document.getElementsByClassName("minimize_navbar_seperator")[0];
 var minimize_navbar_inner = document.getElementsByClassName("navbar_li_a")[2];
-var minimized = false;
+var navbar_minimized = false;
 //called by buttonpress
 function move_navbar_button() {
-    if(!minimized) { //determines how far it needs to scroll and adjusts margin-left to move it offscreen
+    if(!navbar_minimized) { //determines how far it needs to scroll and adjusts margin-left to move it offscreen
         var navbar_width = Number(window.getComputedStyle(navbar).width.slice(0, -2));
         var minimize_navbar_width = Number(window.getComputedStyle(minimize_navbar).width.slice(0, -2));
         var minimize_navbar_seperator_width = Number(window.getComputedStyle(minimize_navbar_seperator).width.slice(0, -2));
@@ -198,14 +204,18 @@ function move_navbar_button() {
 
         navbar.style.setProperty("margin-left", "-" + amount + "px");
         minimize_navbar_inner.innerHTML = "&gt";
-        minimized = true;
+        navbar_minimized = true;
     } else { //return margin-left to 0px
         navbar.style.setProperty("margin-left", "0px");
         minimize_navbar_inner.innerHTML = "&lt"
-        minimized = false;
+        navbar_minimized = false;
     }
 }
 
+//called by buttonpress on token information bar
+function move_token_information() {
+    console.log('woot');
+}
 
 //game board and variables
 let grid_height = 1000;
@@ -369,7 +379,8 @@ function end_select(event) { //selection end handler
     //itterates through all tokens, and if their position is inside the selection_box, add Token to selected_tokens_list
     for(let token_i = 0; token_i < tokens_list.length; token_i++) {
         if(cur_x != 0 && cur_y != 0){ //cursor moved at least once
-            //each statement corresponds to the selection-box mouse moving towards a quadrant. 
+            //each statement corresponds to the selection-box mouse moving towards a quadrant.
+            //fix to include if selected on not center of token
             if((tokens_list[token_i].cur_x < cur_x && tokens_list[token_i].cur_x > start_x) && (tokens_list[token_i].cur_y < cur_y && tokens_list[token_i].cur_y > start_y)) { //bottom-right
                 selected_tokens_list.push(tokens_list[token_i]);
             } else if((tokens_list[token_i].cur_x > cur_x && tokens_list[token_i].cur_x < start_x) && (tokens_list[token_i].cur_y < cur_y && tokens_list[token_i].cur_y > start_y)) { //bottom-left

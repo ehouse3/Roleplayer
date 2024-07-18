@@ -51,13 +51,13 @@ body, html {
 
 
 
-/*navbar*/
+/*navbar*/ /* fix all to organize the navbar and information bar the same way */
 .navbar {
     position: fixed; /*not so sure if this should be fixed or not*/
     z-index: 5;
 
     list-style-type: none;
-    font-size: 16;
+    
     margin: 0px;
     margin-left: 0px;
     transition: margin-left 1.2s ease-in-out;
@@ -81,7 +81,6 @@ body, html {
 }
 .navbar_li_a {
     display: block;
-    color: white;
     text-align: center;
     padding-top: 10px;
     padding-bottom: 5px;
@@ -89,11 +88,15 @@ body, html {
     padding-right: 10px;
     text-decoration: none;
     user-select: none;
+
+    font-size: 16;
+    color: white;
+    
 }
-.navbar_li_a:hover {
+.navbar_li_a:hover { /* fix to be on navbar_li instead of the text <a> */
     background-color: rgb(80, 80, 80);
-    cursor: pointer;
     border-bottom: 5px solid rgb(80, 80, 80);
+    cursor: pointer;
 }
 .minimize_navbar {  
     float: right;
@@ -110,6 +113,66 @@ body, html {
     
 }
 /*end navbar*/
+
+/*token information bar*/
+.token_information {
+    list-style-type: none;
+    position: fixed;
+    width: 250px;
+    height: 400px;
+    bottom: 17px;
+    left: 0px;
+    background-color: rgb(107, 107, 107);
+
+    margin: 0px;
+    padding: 0px;
+
+    display: inline;
+
+    border-top-right-radius: 10px;
+    border-right: 4px solid rgb(68,68,68);
+    border-top: 4px solid rgb(68,68,68);
+
+}
+.token_information_li {
+    text-align: center;
+}
+.token_information_li_a {
+    text-align: center;
+    display: block;
+
+    padding: 10px;
+    font-size: 16;
+    color: white;
+}
+
+.minimize_token_information_li {
+    border-left: 4px solid rgb(68,68,68);
+    background-color: rgb(107, 107, 107);
+    position: relative;
+    right: 0px;
+    height: 100%;
+    width: 30px;
+    float: right;
+
+    display: flex;
+    
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.minimize_token_information_li_a {
+    font-size: 16;
+    color: white;
+    text-align: center;
+}
+.minimize_token_information_li:hover {
+    background-color: rgb(80, 80, 80);
+    cursor: pointer;
+}
+/*end token information bar*/
+
+
 
 /*zoom slider*/
 .zoom_slider_container {
@@ -133,7 +196,7 @@ body, html {
     width: 100%;
     height: 100%;
     border-radius: 5px;  
-    background: rgb(180, 180, 180);;
+    background: rgb(180, 180, 180);
     outline: none;
     opacity: 0.7;
 }
