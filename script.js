@@ -189,17 +189,18 @@ function board_button() {
 }
 
 //minimize navbar
+//calculating how for to minimize the bar
 var navbar = document.getElementById("navbar");
-var minimize_navbar = document.getElementsByClassName("minimize_navbar")[0];
+var minimize_navbar = document.getElementsByClassName("minimize_navbar")[0]; //button itself
 var minimize_navbar_seperator = document.getElementsByClassName("minimize_navbar_seperator")[0];
 var minimize_navbar_inner = document.getElementsByClassName("minimize_navbar_li_a")[0];
 var navbar_minimized = false;
 //called by buttonpress
 function move_navbar_button() {
     if(!navbar_minimized) { //determines how far it needs to scroll and adjusts margin-left to move it offscreen
-        var navbar_width = Number(window.getComputedStyle(navbar).width.slice(0, -2));
-        var minimize_navbar_width = Number(window.getComputedStyle(minimize_navbar).width.slice(0, -2));
-        var minimize_navbar_seperator_width = Number(window.getComputedStyle(minimize_navbar_seperator).width.slice(0, -2));
+        var navbar_width = Number(window.getComputedStyle(navbar).width.split('px')[0]);
+        var minimize_navbar_width = Number(window.getComputedStyle(minimize_navbar).width.split('px')[0]);
+        var minimize_navbar_seperator_width = Number(window.getComputedStyle(minimize_navbar_seperator).width.split('px')[0]);
         var amount = navbar_width - minimize_navbar_width - minimize_navbar_seperator_width;
 
         navbar.style.setProperty("margin-left", "-" + amount + "px");
@@ -212,9 +213,31 @@ function move_navbar_button() {
     }
 }
 
+//minimize token-information
+//calculating how far to minimize the tab
+var token_information = document.getElementById("token_information");
+var token_information_width = Number(window.getComputedStyle(token_information).width.split('px')[0]);
+
+var minimize_token_information_li = document.getElementsByClassName("minimize_token_information_li")[0]; //button itself
+var minimize_token_information_li_width = Number(window.getComputedStyle(minimize_token_information_li).width.split('px')[0]);
+var minimize_token_information_border_width = Number(window.getComputedStyle(minimize_token_information_li).borderLeft.split('px')[0]);
+
+var minimize_token_information_inner = document.getElementsByClassName("minimize_token_information_li_a")[0];
+
+var minimize_amount = (token_information_width - minimize_token_information_li_width) - minimize_token_information_border_width;
+let token_information_minimized = true;
 //called by buttonpress on token information bar
-function move_token_information() {
-    console.log('woot');
+function move_token_information() { 
+    console.log();
+    if(!token_information_minimized) {
+        token_information.style.setProperty("margin-left", "-" + minimize_amount + "px");
+        minimize_token_information_inner.innerHTML = "&gt";
+        token_information_minimized = true;
+    } else {
+        token_information.style.setProperty("margin-left", "0px");
+        minimize_token_information_inner.innerHTML = "&lt";
+        token_information_minimized = false;
+    }
 }
 
 //game board and variables
@@ -440,3 +463,4 @@ new_token2.set_border([60, 60, 60],[78, 78, 78]);
 
 
 
+console.log();
