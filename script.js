@@ -191,18 +191,19 @@ function board_button() {
 //minimize navbar
 //calculating how for to minimize the bar
 var navbar = document.getElementById("navbar");
-var minimize_navbar = document.getElementsByClassName("minimize_navbar")[0]; //button itself
-var minimize_navbar_seperator = document.getElementsByClassName("minimize_navbar_seperator")[0];
-var minimize_navbar_inner = document.getElementsByClassName("minimize_navbar_li_a")[0];
-var navbar_minimized = false;
-//called by buttonpress
-function move_navbar_button() {
-    if(!navbar_minimized) { //determines how far it needs to scroll and adjusts margin-left to move it offscreen
-        var navbar_width = Number(window.getComputedStyle(navbar).width.split('px')[0]);
-        var minimize_navbar_width = Number(window.getComputedStyle(minimize_navbar).width.split('px')[0]);
-        var minimize_navbar_seperator_width = Number(window.getComputedStyle(minimize_navbar_seperator).width.split('px')[0]);
-        var amount = navbar_width - minimize_navbar_width - minimize_navbar_seperator_width;
+var navbar_width = Number(window.getComputedStyle(navbar).width.split('px')[0]); //total width
 
+var minimize_navbar = document.getElementsByClassName("minimize_navbar")[0]; //button itself
+var minimize_navbar_width = Number(window.getComputedStyle(minimize_navbar).width.split('px')[0]); //button width
+
+var minimize_navbar_seperator = document.getElementsByClassName("minimize_navbar_seperator")[0]; //seperator
+var minimize_navbar_seperator_width = Number(window.getComputedStyle(minimize_navbar_seperator).width.split('px')[0]); //seperator width
+
+var amount = navbar_width - minimize_navbar_width - minimize_navbar_seperator_width; //amount to minimize such that button still shows
+var minimize_navbar_inner = document.getElementsByClassName("minimize_navbar_li_a")[0]; //text element
+var navbar_minimized = false;
+function move_navbar_button() { //called by buttonpress on navbar
+    if(!navbar_minimized) { //determines how far it needs to scroll and adjusts margin-left to move it offscreen
         navbar.style.setProperty("margin-left", "-" + amount + "px");
         minimize_navbar_inner.innerHTML = "&gt";
         navbar_minimized = true;
@@ -216,18 +217,17 @@ function move_navbar_button() {
 //minimize token-information
 //calculating how far to minimize the tab
 var token_information = document.getElementById("token_information");
-var token_information_width = Number(window.getComputedStyle(token_information).width.split('px')[0]);
+var token_information_width = Number(window.getComputedStyle(token_information).width.split('px')[0]); //total width
 
 var minimize_token_information_li = document.getElementsByClassName("minimize_token_information_li")[0]; //button itself
-var minimize_token_information_li_width = Number(window.getComputedStyle(minimize_token_information_li).width.split('px')[0]);
-var minimize_token_information_border_width = Number(window.getComputedStyle(minimize_token_information_li).borderLeft.split('px')[0]);
+var minimize_token_information_li_width = Number(window.getComputedStyle(minimize_token_information_li).width.split('px')[0]); //button width
+var minimize_token_information_border_width = Number(window.getComputedStyle(minimize_token_information_li).borderLeft.split('px')[0]); //border width
 
-var minimize_token_information_inner = document.getElementsByClassName("minimize_token_information_li_a")[0];
+var minimize_token_information_inner = document.getElementsByClassName("minimize_token_information_li_a")[0]; //text element
 
-var minimize_amount = (token_information_width - minimize_token_information_li_width) - minimize_token_information_border_width;
+var minimize_amount = (token_information_width - minimize_token_information_li_width) - minimize_token_information_border_width; //amount to minimize such that button still shows
 let token_information_minimized = true;
-//called by buttonpress on token information bar
-function move_token_information() { 
+function move_token_information() { //called by buttonpress on token information bar
     console.log();
     if(!token_information_minimized) {
         token_information.style.setProperty("margin-left", "-" + minimize_amount + "px");
