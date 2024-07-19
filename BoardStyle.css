@@ -123,8 +123,12 @@ body, html {
     user-select: none;
 
     font-size: 16;
-    color: white;
-    
+    color: white;   
+}
+.minimize_navbar_li_a:hover { /* fix to be on navbar_li instead of the text <a> */
+    background-color: rgb(80, 80, 80);
+    border-bottom: 5px solid rgb(80, 80, 80);
+    cursor: pointer;
 }
 /*end navbar*/
 
@@ -146,7 +150,8 @@ body, html {
     border-top-right-radius: 10px;
     border-right: 4px solid rgb(68,68,68);
     border-top: 4px solid rgb(68,68,68);
-
+    
+    margin-left: -226px; /* width - border */
 }
 .token_information_li {
     text-align: center;

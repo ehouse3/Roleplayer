@@ -10,16 +10,16 @@ body, html {
 }
 
 
-/*navbar*/
+/*navbar*/ /* fix all to organize the navbar and information bar the same way */
 .navbar {
     position: fixed; /*not so sure if this should be fixed or not*/
     z-index: 5;
 
     list-style-type: none;
-    font-size: 16;
+    
     margin: 0px;
     margin-left: 0px;
-    transition: margin-left 1s ease-in-out;
+    transition: margin-left 1.2s ease-in-out;
     padding: 0px;
     overflow: hidden;
     background-color: rgb(107, 107, 107);
@@ -40,25 +40,26 @@ body, html {
 }
 .navbar_li_a {
     display: block;
-    color: white;
     text-align: center;
-
     padding-top: 10px;
     padding-bottom: 5px;
     padding-left: 10px;
     padding-right: 10px;
-
     text-decoration: none;
     user-select: none;
+
+    font-size: 16;
+    color: white;
+    
 }
-.navbar_li_a:hover {
+.navbar_li_a:hover { /* fix to be on navbar_li instead of the text <a> */
     background-color: rgb(80, 80, 80);
-    cursor: pointer;
     border-bottom: 5px solid rgb(80, 80, 80);
+    cursor: pointer;
 }
 .minimize_navbar {  
     float: right;
-    width: 30px;
+    width: 20px;
     text-align: center;
     padding: 0px;
 }
@@ -69,6 +70,24 @@ body, html {
     margin-bottom: 0px;
     background-color: rgb(68,68,68);
     
+}
+.minimize_navbar_li_a {
+    display: block;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-left: 4px;
+    padding-right: 4px;
+    text-decoration: none;
+    user-select: none;
+
+    font-size: 16;
+    color: white;   
+}
+.minimize_navbar_li_a:hover { /* fix to be on navbar_li instead of the text <a> */
+    background-color: rgb(80, 80, 80);
+    border-bottom: 5px solid rgb(80, 80, 80);
+    cursor: pointer;
 }
 /*end navbar*/
 

@@ -192,7 +192,7 @@ function board_button() {
 var navbar = document.getElementById("navbar");
 var minimize_navbar = document.getElementsByClassName("minimize_navbar")[0];
 var minimize_navbar_seperator = document.getElementsByClassName("minimize_navbar_seperator")[0];
-var minimize_navbar_inner = document.getElementsByClassName("navbar_li_a")[2];
+var minimize_navbar_inner = document.getElementsByClassName("minimize_navbar_li_a")[0];
 var navbar_minimized = false;
 //called by buttonpress
 function move_navbar_button() {
