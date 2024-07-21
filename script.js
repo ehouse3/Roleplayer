@@ -60,7 +60,7 @@ class Token {
     set cur_y(new_y) { this._cur_y = new_y; }
     set name(new_name) { this._name = new_name; }
     set selected(new_selected) { //replace all with filter w/ hue rotate and a sepperate css class
-        if(this.selected == false && new_selected == true) {
+        if(new_selected == true && this.selected == false) {
             this.previous_border_0 = this.element_circle_0.style.getPropertyValue("stroke");
             this.previous_border_1 = this.element_circle_1.style.getPropertyValue("stroke");
             
@@ -72,7 +72,7 @@ class Token {
             this.previous_border_0 = '';
             this.previous_border_1 = '';
         }
-        this._selected = new_selected; 
+        this._selected = new_selected;
     }
     prevent_movement() { this._movement_allowed = false; }
     allow_movement() { this._movement_allowed = true; }
@@ -126,7 +126,8 @@ class Token {
 
     start_drag = (event) => { //starting dragging event handler
         if (event.button !== 0) return; //on left click
-        if (event.target.parentElement.id != this.unique_id && this.selected == false) return; //check if unique id doesnt match that of element clicked (needed because handler bound to gameboard)
+        //check unique id matches that of element on cursor (needed because handler bound to gameboard), and will drag anyway if its selected
+        if (event.target.parentElement.id != this.unique_id && this.selected == false) return; 
         if (!this.movement_allowed) return;
         let {x, y} = this.event_to_svg_coordinates(event);
         this.dragging = {dx: this.cur_x - x, dy: this.cur_y - y};
@@ -216,6 +217,7 @@ function move_navbar_button() { //called by buttonpress on navbar
 
 //minimize token-information
 //calculating how far to minimize the tab
+var cur_token_information = '';
 var token_information = document.getElementById("token_information");
 var token_information_width = Number(window.getComputedStyle(token_information).width.split('px')[0]); //total width
 
@@ -347,9 +349,20 @@ var cur_x = 0;
 var  cur_y = 0;
 var selector_element = document.getElementById("selector");
 function start_select(event) { //selection start handler
-    //consider rewriting using getscreenctm
     if(event.button !== 0) return; //mouse 0 only
-    if(event.target.parentElement.classList.contains("token")) { return; } //will not box select on a token piece
+    if(event.target.parentElement.classList.contains("token")) { //will not box select on a token piece, instead will 'select it' and let movement handler deal with it
+        let target_id = event.target.parentElement.id;
+        let token_i = 0;
+        while(token_i < tokens_list.length) { //itterates through tokens until it finds the one that the cursor is over
+            if(target_id == tokens_list[token_i].unique_id && tokens_list[token_i].selected == false) {
+                tokens_list[token_i].selected = true;
+                selected_tokens_list.push(tokens_list[token_i])
+                token_i = tokens_list.length; //exit loop
+            }
+            token_i++;
+        }
+        return; 
+    }
 
     //unselects previous tokens & clears selected list
     for(let selected_tokens_list_i = 0; selected_tokens_list_i < selected_tokens_list.length; selected_tokens_list_i++) { //remove all selected
@@ -398,7 +411,14 @@ function move_select(event) { //selection move handler
 }
 function end_select(event) { //selection end handler
     //create function to find all elements in selector_element, and set 'selected' instance var for each token to true.
-    if(!box_selecting) return;
+    if(!box_selecting) {
+        //unselects previous tokens & clears selected list
+        for(let selected_tokens_list_i = 0; selected_tokens_list_i < selected_tokens_list.length; selected_tokens_list_i++) { //remove all selected
+            selected_tokens_list[selected_tokens_list_i].selected = false;
+    }
+    selected_tokens_list = [];
+        return;
+    }
     //itterates through all tokens, and if their position is inside the selection_box, add Token to selected_tokens_list
     for(let token_i = 0; token_i < tokens_list.length; token_i++) {
         if(cur_x != 0 && cur_y != 0){ //cursor moved at least once
