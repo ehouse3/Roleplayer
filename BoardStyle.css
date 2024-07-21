@@ -156,14 +156,27 @@ body, html {
 .token_information_li {
     text-align: center;
 }
-.token_information_li_a {
+.token_information_li_a0 {
     text-align: center;
     display: block;
 
-    padding: 10px;
-    font-size: 16;
+    padding: 8px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 16px;
     color: white;
 }
+.token_information_li_a1{
+    text-align: center;
+    display: block;
+
+    padding: 8px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 12px;
+    color: white;
+}
+
 .minimize_token_information_li {
     
     display: flex;
@@ -179,11 +192,7 @@ body, html {
     background-color: rgb(107, 107, 107);
     color: white;
 }
-.minimize_token_information_li_a {
-    font-size: 16;
-    color: white;
-    text-align: center;
-}
+
 .minimize_token_information_li:hover {
     background-color: rgb(80, 80, 80);
     cursor: pointer;

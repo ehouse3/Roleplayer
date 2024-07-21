@@ -38,13 +38,12 @@ class Token {
         this._movement_allowed = true;
 
         //token game stats
-        this.health = 0;
-        this.mana = 0;
-        this.armor = 0;
-        this.speed = 0;
+        this._health = 10;
+        this._mana = 5;
+        this._armor = 0;
+        this._speed = 0;
     }
     //getter functions
-    get name() { return this._name; }
     get element_parent() { return this._element_parent; }
     get element_circle_0() { return this._element_circle_0; }
     get element_circle_1() { return this._element_circle_1; }
@@ -55,10 +54,16 @@ class Token {
     get unique_id() { return this._unique_id; }
     get movement_allowed() { return this._movement_allowed; }
 
+    get name() { return this._name; }
+    get health() { return this._health; }
+    get mana() { return this._mana; }
+
     //setter functions
     set cur_x(new_x) { this._cur_x = new_x; }
     set cur_y(new_y) { this._cur_y = new_y; }
     set name(new_name) { this._name = new_name; }
+    set health(new_health) { this._health = new_health; }
+    set mana(new_mana) { this._mana = new_mana; }
     set selected(new_selected) { //replace all with filter w/ hue rotate and a sepperate css class
         if(new_selected == true && this.selected == false) {
             this.previous_border_0 = this.element_circle_0.style.getPropertyValue("stroke");
@@ -203,7 +208,7 @@ var minimize_navbar_seperator_width = Number(window.getComputedStyle(minimize_na
 var amount = navbar_width - minimize_navbar_width - minimize_navbar_seperator_width; //amount to minimize such that button still shows
 var minimize_navbar_inner = document.getElementsByClassName("minimize_navbar_li_a")[0]; //text element
 var navbar_minimized = false;
-function move_navbar_button() { //called by buttonpress on navbar
+function minimize_navbar_button() { //called by buttonpress on navbar
     if(!navbar_minimized) { //determines how far it needs to scroll and adjusts margin-left to move it offscreen
         navbar.style.setProperty("margin-left", "-" + amount + "px");
         minimize_navbar_inner.innerHTML = "&gt";
@@ -217,7 +222,6 @@ function move_navbar_button() { //called by buttonpress on navbar
 
 //minimize token-information
 //calculating how far to minimize the tab
-var cur_token_information = '';
 var token_information = document.getElementById("token_information");
 var token_information_width = Number(window.getComputedStyle(token_information).width.split('px')[0]); //total width
 
@@ -229,8 +233,7 @@ var minimize_token_information_inner = document.getElementsByClassName("minimize
 
 var minimize_amount = (token_information_width - minimize_token_information_li_width) - minimize_token_information_border_width; //amount to minimize such that button still shows
 let token_information_minimized = true;
-function move_token_information() { //called by buttonpress on token information bar
-    console.log();
+function minimize_token_information() { //called by buttonpress on token information bar
     if(!token_information_minimized) {
         token_information.style.setProperty("margin-left", "-" + minimize_amount + "px");
         minimize_token_information_inner.innerHTML = "&gt";
@@ -240,6 +243,16 @@ function move_token_information() { //called by buttonpress on token information
         minimize_token_information_inner.innerHTML = "&lt";
         token_information_minimized = false;
     }
+}
+var cur_displayed_token = '';
+var name_element = document.getElementById("name");
+var health_element = document.getElementById("health");
+var mana_element = document.getElementById("mana");
+function update_token_information() {
+    console.log(cur_displayed_token);
+    name_element.innerHTML = cur_displayed_token.name;
+    health_element.innerHTML = "hp : " + cur_displayed_token.health;
+    mana_element.innerHTML = "mp : " + cur_displayed_token.mana;
 }
 
 //game board and variables
@@ -357,10 +370,13 @@ function start_select(event) { //selection start handler
             if(target_id == tokens_list[token_i].unique_id && tokens_list[token_i].selected == false) {
                 tokens_list[token_i].selected = true;
                 selected_tokens_list.push(tokens_list[token_i])
+                cur_displayed_token = tokens_list[token_i];
                 token_i = tokens_list.length; //exit loop
             }
             token_i++;
         }
+        
+        update_token_information();
         return; 
     }
 
@@ -483,4 +499,4 @@ new_token2.set_border([60, 60, 60],[78, 78, 78]);
 
 
 
-console.log();
+console.log("");
