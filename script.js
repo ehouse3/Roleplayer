@@ -476,6 +476,10 @@ board_container.addEventListener('pointercancel', end_select);
 board_container.addEventListener('pointermove', move_select);
 
 
+function create_new_token() {
+    console.log('woot');
+    
+}
 
 //creating tokens
 let new_element = document.getElementsByClassName("token")[0];

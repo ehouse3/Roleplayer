@@ -154,11 +154,12 @@ body, html {
     border-top: 4px solid rgb(68,68,68);
 }
 .token_information_li {
+    width: 100%;
     text-align: center;
 }
 .token_information_li_a0 {
     text-align: center;
-    display: block;
+    display: inherit;
 
     padding: 8px;
     padding-top: 5px;
@@ -168,7 +169,7 @@ body, html {
 }
 .token_information_li_a1{
     text-align: center;
-    display: block;
+    display: inherit;
 
     padding: 8px;
     padding-top: 5px;
@@ -177,8 +178,31 @@ body, html {
     color: white;
 }
 
+.token_information_break { /* i dont know how to make this work in flexbox */
+    height: 285px;
+}
+.new_token_button_li {
+    border-top: 4px solid rgb(68,68,68);
+    text-align: center;
+    user-select: none;
+}
+.new_token_button_li:hover {
+    background-color: rgb(80, 80, 80);
+    cursor: pointer;
+}
+.new_token_button_li_a {
+    text-align: center;
+    display: inherit;
+
+    padding: 8px;
+    padding-top: 5px;
+    padding-bottom: 7px;
+    font-size: 16px;
+    color: white;
+
+}
+
 .minimize_token_information_li {
-    
     display: flex;
     position: relative;
     right: 0px;
@@ -256,7 +280,7 @@ body, html {
     opacity: 50%;
     fill: lightblue;
     stroke: blue;
-    stroke-width: 2px;
+    stroke-width: 1px;
     
 }
 /*end selector*/

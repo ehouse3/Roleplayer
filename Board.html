@@ -16,12 +16,14 @@
 
 <ul class="token_information" id="token_information">
   <li onclick="minimize_token_information()" class="minimize_token_information_li"><a class="minimize_token_information_li_a">&gt</a></li>
-
-  <li class="token_information_li"><a id="name" class="token_information_li_a0">token name</a></li>
-  <li class="token_information_li"><a id="health" class="token_information_li_a1">health points</a></li>
-  <li class="token_information_li"><a id="mana" class="token_information_li_a1">mana points</a></li>
-
-  
+  <div class="token_information_container">
+    <li class="token_information_li"><a id="name" class="token_information_li_a0">token name</a></li>
+    <li class="token_information_li"><a id="health" class="token_information_li_a1">health points</a></li>
+    <li class="token_information_li"><a id="mana" class="token_information_li_a1">mana points</a></li>
+    
+    <div class="token_information_break"></div>
+    <li onclick="create_new_token()" class="new_token_button_li"><a class="new_token_button_li_a">Create New Token</a></li>
+  </div>
 </ul>
 
 
