@@ -366,6 +366,7 @@ function start_select(event) { //selection start handler
     if(event.target.parentElement.classList.contains("token")) { //will not box select on a token piece, instead will 'select it' and let movement handler deal with it
         let target_id = event.target.parentElement.id;
         let token_i = 0;
+        //might want to improve later with a master list of elements to go along with tokens
         while(token_i < tokens_list.length) { //itterates through tokens until it finds the one that the cursor is over
             if(target_id == tokens_list[token_i].unique_id && tokens_list[token_i].selected == false) {
                 tokens_list[token_i].selected = true;
@@ -475,24 +476,29 @@ board_container.addEventListener('pointerup', end_select);
 board_container.addEventListener('pointercancel', end_select);
 board_container.addEventListener('pointermove', move_select);
 
+var token_prefab = document.getElementById("token_prefab");
+console.log(token_prefab);
+var unique_id = 0; //assigns a different unique id to each created token
+function create_new_token() { //clones and appends prefab. Then creates token with appropiate creation functions
+    let new_element = token_prefab.cloneNode(true);
+    board_svg.appendChild(new_element);
+    let new_token = new Token("really large token", new_element, 400, 400, 24, unique_id);
+    tokens_list.push(new_token);
 
-function create_new_token() {
-    console.log('woot');
-    
+    new_token.make_draggable();
+    new_token.set_border([60, 60, 60],[78, 78, 78]);
+    unique_id++;
 }
 
 //creating tokens
-let new_element = document.getElementsByClassName("token")[0];
-let new_token = new Token("really large token", new_element, 400, 400, 24, "a");
-tokens_list.push(new_token);
-new_token.make_draggable();
-new_token.set_border([60, 60, 60],[78, 78, 78]);
 
+/*
 let new_element2 = document.getElementsByClassName("token")[1];
 let new_token2 = new Token("really large token2", new_element2, 600, 600, 48, "b");
 tokens_list.push(new_token2);
 new_token2.make_draggable();
 new_token2.set_border([60, 60, 60],[78, 78, 78]);
+*/
 
 
 
