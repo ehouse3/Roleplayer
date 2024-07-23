@@ -248,11 +248,13 @@ var cur_displayed_token = '';
 var name_element = document.getElementById("name");
 var health_element = document.getElementById("health");
 var mana_element = document.getElementById("mana");
+var border_element = document.getElementById("border");
 function update_token_information() {
     console.log(cur_displayed_token);
     name_element.innerHTML = cur_displayed_token.name;
     health_element.innerHTML = "hp : " + cur_displayed_token.health;
     mana_element.innerHTML = "mp : " + cur_displayed_token.mana;
+    border_element.innerHTML = "size : " + cur_displayed_token.width;
 }
 
 //game board and variables
@@ -482,7 +484,7 @@ var unique_id = 0; //assigns a different unique id to each created token
 function create_new_token() { //clones and appends prefab. Then creates token with appropiate creation functions
     let new_element = token_prefab.cloneNode(true);
     board_svg.appendChild(new_element);
-    let new_token = new Token("really large token", new_element, 400, 400, 24, unique_id);
+    let new_token = new Token("new token", new_element, 400, 400, 24, unique_id);
     tokens_list.push(new_token);
 
     new_token.make_draggable();
@@ -492,13 +494,31 @@ function create_new_token() { //clones and appends prefab. Then creates token wi
 
 //creating tokens
 
-/*
+
 let new_element2 = document.getElementsByClassName("token")[1];
-let new_token2 = new Token("really large token2", new_element2, 600, 600, 48, "b");
+let new_token2 = new Token("starting token S", new_element2, 125, 100, 12, "a");
 tokens_list.push(new_token2);
 new_token2.make_draggable();
-new_token2.set_border([60, 60, 60],[78, 78, 78]);
-*/
+new_token2.set_border([160, 60, 60],[178, 78, 78]);
+
+let new_element3 = document.getElementsByClassName("token")[2];
+let new_token3 = new Token("starting token M", new_element3, 150, 100, 24, "b");
+tokens_list.push(new_token3);
+new_token3.make_draggable();
+new_token3.set_border([60, 160, 60],[78, 178, 78]);
+
+let new_element4 = document.getElementsByClassName("token")[3];
+let new_token4 = new Token("starting token L", new_element4, 200, 88, 36, "c");
+tokens_list.push(new_token4);
+new_token4.make_draggable();
+new_token4.set_border([60, 60, 160],[78, 78, 178]);
+
+let new_element5 = document.getElementsByClassName("token")[4];
+let new_token5 = new Token("starting token XL", new_element5, 250, 88, 48, "d");
+tokens_list.push(new_token5);
+new_token5.make_draggable();
+new_token5.set_border([60, 60, 60],[78, 78, 78]);
+
 
 
 

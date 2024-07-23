@@ -99,6 +99,7 @@ body, html {
     border-bottom: 5px solid rgb(80, 80, 80);
     cursor: pointer;
 }
+
 .minimize_navbar {  
     float: right;
     width: 20px;
@@ -180,7 +181,7 @@ body, html {
 }
 
 .token_information_break { /* i dont know how to make this work in flexbox */
-    height: 285px;
+    height: 261px;
 }
 .new_token_button_li {
     border-top: 4px solid rgb(68,68,68);
