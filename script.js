@@ -497,21 +497,21 @@ function create_new_token() { //clones and appends prefab. Then creates token wi
 
 let new_element2 = document.getElementsByClassName("token")[1];
 let new_token2 = new Token("starting token S", new_element2, 125, 100, 12, "a");
-new_token5.health = 25;
+new_token2.health = 25;
 new_token2.make_draggable();
 new_token2.set_border([160, 60, 60],[178, 78, 78]);
 tokens_list.push(new_token2);
 
 let new_element3 = document.getElementsByClassName("token")[2];
 let new_token3 = new Token("starting token M", new_element3, 150, 100, 24, "b");
-new_token5.health = 50;
+new_token3.health = 50;
 new_token3.make_draggable();
 new_token3.set_border([60, 160, 60],[78, 178, 78]);
 tokens_list.push(new_token3);
 
 let new_element4 = document.getElementsByClassName("token")[3];
 let new_token4 = new Token("starting token L", new_element4, 200, 88, 36, "c");
-new_token5.health = 75;
+new_token4.health = 75;
 new_token4.make_draggable();
 new_token4.set_border([60, 60, 160],[78, 78, 178]);
 tokens_list.push(new_token4);

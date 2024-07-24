@@ -11,7 +11,7 @@ var navbar = document.getElementById("navbar");
 var minimize_navbar = document.getElementsByClassName("minimize_navbar")[0];
 var minimize_navbar_seperator = document.getElementsByClassName("minimize_navbar_seperator")[0];
 var minimize_navbar_inner = document.getElementsByClassName("minimize_navbar_li_a")[0];
-var navbar_minimized = false;
+var navbar_minimized = true;
 //called by buttonpress
 function move_navbar_button() {
     if(!navbar_minimized) { //determines how far it needs to scroll and adjusts margin-left to move it offscreen
@@ -29,4 +29,5 @@ function move_navbar_button() {
         navbar_minimized = false;
     }
 }
+
 
