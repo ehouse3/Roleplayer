@@ -506,7 +506,7 @@ let new_element3 = document.getElementsByClassName("token")[2];
 let new_token3 = new Token("starting token M", new_element3, 150, 100, 24, "b");
 new_token3.health = 50;
 new_token3.make_draggable();
-new_token3.set_border([60, 160, 60],[78, 178, 78]);
+new_token3.set_border([60, 110, 60],[78, 120, 78]);
 tokens_list.push(new_token3);
 
 let new_element4 = document.getElementsByClassName("token")[3];

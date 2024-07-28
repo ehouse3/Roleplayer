@@ -147,9 +147,9 @@ body, html {
     margin: auto;
 
     background: linear-gradient(to bottom, rgb(82, 108, 159), rgba(0, 0, 0, 0)) border-box;
-    border-top-left-radius: 18px; 
-    border-top-right-radius: 18px;
-    border: 10px solid transparent;
+    border-top-left-radius: 30px; 
+    border-top-right-radius: 30px;
+    border: 15px solid transparent;
 }
 #section_1_container {
     width: fit-content;
@@ -196,11 +196,18 @@ body, html {
     box-shadow: 0px -20px 20px rgb(57, 57, 57);
 }
 .section_2_item {
-    font-size: 25px;
-    padding: 25px;
+    font-size: 20px;
+    padding: 0px;
     border-left: 8px solid rgb(57, 57, 57);
-    border: 1px solid grey;
+    background-color: rgb(125, 125, 135);
+    width: fit-content;
+    
     flex-grow: 1;
+    flex-basis: 33%;
     text-align: center;
     /*box-shadow: -5px -5px black;*/
+}
+.section_2_item > p {
+    padding: 0px;
+    margin: 5px;
 }
