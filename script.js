@@ -315,6 +315,7 @@ zoom_slider.oninput = function() {
 //might want to rework later to not be dependant on zoom slider
 function mouse_zoom(event) {
     step = zoom_slider.getAttribute("step");
+    event.preventDefault();
     //console.log("X " + event.clientX + " Y " + event.clientY);
     if(event.deltaY < 0){
         zoom_slider.value = Number(zoom_slider.value) + Number(step); //manually increases zoom by 1 step
@@ -326,7 +327,6 @@ function mouse_zoom(event) {
         //console.log("zooming out");
     }
 }
-board_container.addEventListener("wheel", (event) => event.preventDefault());
 board_container.addEventListener("wheel", mouse_zoom);
 
 //panning
