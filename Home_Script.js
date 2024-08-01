@@ -34,7 +34,7 @@ function move_navbar_button() {
 //on scroll down, sets the next element to be in the frame, then on scroll again, puts it into the middle of the frame.
 var filler = document.getElementById('section_2_filler');
 //filler.style.height = '0px';
-var scroll_list = [0, 220, 450]; //list of each locations
+var scroll_list = [0, 460]; //list of each locations
 var scroll_list_i = 0; //itterable
 var scroll_delay_passed = true;
 function scroll_handler(event) {
@@ -49,7 +49,7 @@ function scroll_handler(event) {
         scroll_list_i -= 1;
         console.log("up : " + scroll_list[scroll_list_i]);
         window.scrollTo(0, Number(scroll_list[scroll_list_i]));
-        setTimeout(() => scroll_delay_passed = true, 125);
+        setTimeout(() => scroll_delay_passed = true, 500);
     }
 }
 window.addEventListener('wheel', scroll_handler);

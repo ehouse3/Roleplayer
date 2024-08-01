@@ -195,6 +195,7 @@ body, html {
 }
 #section_2_gradient {
     background: linear-gradient(to bottom, rgba(0,0,0,0), rgb(57, 57, 57));
+    border-bottom: 5px solid rgb(57, 57, 57);
     height: 25px;
 }
 
@@ -208,27 +209,48 @@ body, html {
     scroll-snap-align: center;*/
 
     height: 200px;
+    background-color: rgb(57, 57, 57);
     /* box-shadow: 0px -20px 20px rgb(57, 57, 57); */
 }
 .section_3_item {
     font-size: 20px;
     padding: 0px;
-    border-left: 8px solid rgb(57, 57, 57);
     background-color: rgb(125, 125, 135);
     width: fit-content;
     min-height: 200px;
+    border-radius: 18px;
     
     flex-grow: 1;
-    flex-basis: 33%;
+    flex-basis: 33.3%;
     text-align: center;
     /*box-shadow: -5px -5px black;*/
+}
+.section_3_item_left {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+.section_3_item_right {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 .section_3_item > p {
     padding: 0px;
     margin: 5px;
 }
+.section_3_seperator {
+    width: 3px;
+    flex-grow: 1;
+    height: inherit;
+}
 
 #section_4 {
-    height: 800px;
     background-color: transparent;
+}
+#section_4_filler {
+    height: 750px;
+}
+#section_4_gradient {
+    height: 75px;
+    border-top: 15px solid rgb(57, 57, 57);
+    background: linear-gradient(to bottom, rgb(57, 57, 57), rgb(180, 180, 180));
 }
