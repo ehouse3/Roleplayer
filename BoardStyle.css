@@ -97,7 +97,11 @@ body, html {
     cursor: pointer;
 }
 
-.minimize_navbar {  
+.button:hover{ /*button*/
+    background-color: rgb(80, 80, 80);
+    cursor: pointer;
+}
+.minimize_navbar_button {  
     float: right;
     width: 28px;
     text-align: center;
@@ -110,7 +114,7 @@ body, html {
     font-size: 16;
     color: white; 
 }
-.minimize_navbar:hover {
+.minimize_navbar_button:hover {
     background-color: rgb(80, 80, 80);
     border-bottom: 5px solid rgb(80, 80, 80);
     cursor: pointer;
@@ -139,27 +143,16 @@ body, html {
 
     display: inline;
     transition: margin-left 0.75s ease-in-out;
-    margin-left: -226px; /* width - button - border */
+    margin-left: -218px; /* width - button - border */
 
-    border-top-right-radius: 10px;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
     border-right: 4px solid rgb(68,68,68);
     border-top: 4px solid rgb(68,68,68);
+    border-bottom: 4px solid rgb(68,68,68);
 }
-.token_information_li {
+.token_information_container > li {
     width: 100%;
-    text-align: center;
-}
-.token_information_li_a0 {
-    text-align: center;
-    display: inherit;
-
-    padding: 8px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 16px;
-    color: white;
-}
-.token_information_li_a1{
     text-align: center;
     display: inherit;
 
@@ -169,50 +162,42 @@ body, html {
     font-size: 12px;
     color: white;
 }
+#name {
+    font-size: 16px;
+}
 
 .token_information_break { /* i dont know how to make this work in flexbox */
-    height: 261px;
+    height: 222px;
 }
-.new_token_button_li {
+.new_token_button, .delete_token_button {
     border-top: 4px solid rgb(68,68,68);
     text-align: center;
     user-select: none;
-}
-.new_token_button_li:hover {
-    background-color: rgb(80, 80, 80);
-    cursor: pointer;
-}
-.new_token_button_li_a {
-    text-align: center;
     display: inherit;
-
     padding: 8px;
-    padding-top: 5px;
+    padding-top: 7px;
     padding-bottom: 7px;
     font-size: 16px;
     color: white;
-
 }
 
-.minimize_token_information_li {
+.minimize_token_information_button {
     display: flex;
     position: relative;
     right: 0px;
     height: 100%;
-    width: 20px;
+    width: 28px;
     float: right;
     align-items: center;
     justify-content: center;
     
     border-left: 4px solid rgb(68,68,68);
+    border-top-right-radius: 13px;
+    border-bottom-right-radius: 13px;
     background-color: rgb(107, 107, 107);
     color: white;
 }
 
-.minimize_token_information_li:hover {
-    background-color: rgb(80, 80, 80);
-    cursor: pointer;
-}
 /*end token information bar*/
 
 

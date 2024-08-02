@@ -199,23 +199,22 @@ function board_button() {
 var navbar = document.getElementById("navbar");
 var navbar_width = Number(window.getComputedStyle(navbar).width.split('px')[0]); //total width
 
-var minimize_navbar = document.getElementsByClassName("minimize_navbar")[0]; //button itself
-var minimize_navbar_width = Number(window.getComputedStyle(minimize_navbar).width.split('px')[0]); //button width
+var minimize_navbar_button = document.getElementsByClassName("minimize_navbar_button")[0]; //button itself
+var minimize_navbar_button_width = Number(window.getComputedStyle(minimize_navbar_button).width.split('px')[0]); //button width
 
 var minimize_navbar_seperator = document.getElementsByClassName("minimize_navbar_seperator")[0]; //seperator
 var minimize_navbar_seperator_width = Number(window.getComputedStyle(minimize_navbar_seperator).width.split('px')[0]); //seperator width
 
-var amount = navbar_width - minimize_navbar_width - minimize_navbar_seperator_width; //amount to minimize such that button still shows
-var minimize_navbar_inner = document.getElementsByClassName("minimize_navbar")[0]; //text element
+var amount = navbar_width - minimize_navbar_button_width - minimize_navbar_seperator_width; //amount to minimize such that button still shows
 var navbar_minimized = false;
-function minimize_navbar_button() { //called by buttonpress on navbar
+function minimize_navbar() { //called by buttonpress on navbar
     if(!navbar_minimized) { //determines how far it needs to scroll and adjusts margin-left to move it offscreen
         navbar.style.setProperty("margin-left", "-" + amount + "px");
-        minimize_navbar_inner.innerHTML = "&gt";
+        minimize_navbar_button.innerHTML = "&gt";
         navbar_minimized = true;
     } else { //return margin-left to 0px
         navbar.style.setProperty("margin-left", "0px");
-        minimize_navbar_inner.innerHTML = "&lt"
+        minimize_navbar_button.innerHTML = "&lt"
         navbar_minimized = false;
     }
 }
@@ -225,25 +224,24 @@ function minimize_navbar_button() { //called by buttonpress on navbar
 var token_information = document.getElementById("token_information");
 var token_information_width = Number(window.getComputedStyle(token_information).width.split('px')[0]); //total width
 
-var minimize_token_information_li = document.getElementsByClassName("minimize_token_information_li")[0]; //button itself
-var minimize_token_information_li_width = Number(window.getComputedStyle(minimize_token_information_li).width.split('px')[0]); //button width
-var minimize_token_information_border_width = Number(window.getComputedStyle(minimize_token_information_li).borderLeft.split('px')[0]); //border width
+var minimize_token_information_button = document.getElementsByClassName("minimize_token_information_button")[0]; //button itself
+var minimize_token_information_width = Number(window.getComputedStyle(minimize_token_information_button).width.split('px')[0]); //button width
+var minimize_token_information_border_width = Number(window.getComputedStyle(minimize_token_information_button).borderLeft.split('px')[0]); //border width
 
-var minimize_token_information_inner = document.getElementsByClassName("minimize_token_information_li_a")[0]; //text element
-
-var minimize_amount = (token_information_width - minimize_token_information_li_width) - minimize_token_information_border_width; //amount to minimize such that button still shows
+var minimize_amount = (token_information_width - minimize_token_information_width) - minimize_token_information_border_width; //amount to minimize such that button still shows
 let token_information_minimized = true;
 function minimize_token_information() { //called by buttonpress on token information bar
     if(!token_information_minimized) {
         token_information.style.setProperty("margin-left", "-" + minimize_amount + "px");
-        minimize_token_information_inner.innerHTML = "&gt";
+        minimize_token_information_button.innerHTML = "&gt";
         token_information_minimized = true;
     } else {
         token_information.style.setProperty("margin-left", "0px");
-        minimize_token_information_inner.innerHTML = "&lt";
+        minimize_token_information_button.innerHTML = "&lt";
         token_information_minimized = false;
     }
 }
+
 var cur_displayed_token = '';
 var name_element = document.getElementById("name");
 var health_element = document.getElementById("health");

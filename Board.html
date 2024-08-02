@@ -17,22 +17,23 @@ Thank you!
   <li><a onclick="home_button()" href="Home.html">Home</a></li>
   <li><a style="border-bottom: 5px solid rgb(68,68,68);" onclick="board_button()" href="Board.html">Board</a></li>
 
-  <div class="minimize_navbar" onclick="minimize_navbar_button()">&lt</div>
+  <div class="minimize_navbar_button" onclick="minimize_navbar()">&lt</div>
   <div class="minimize_navbar_seperator"></div>
 </ul>
 
 <!--token information bar-->
 <ul class="token_information" id="token_information">
-  <li onclick="minimize_token_information()" class="minimize_token_information_li"><a class="minimize_token_information_li_a">&gt</a></li>
+  <div class="minimize_token_information_button button" onclick="minimize_token_information()">&gt</div>
   <div class="token_information_container">
-    <li class="token_information_li"><a id="name" class="token_information_li_a0">token name</a></li>
-    <li class="token_information_li"><a id="health" class="token_information_li_a1">health points</a></li>
-    <li class="token_information_li"><a id="mana" class="token_information_li_a1">mana points</a></li>
-    <li class="token_information_li"><a id="border" class="token_information_li_a1">size</a></li>
+    <li id="name">token name</li>
+    <li id="health">health points</li>
+    <li id="mana">mana points</li>
+    <li id="border">size</li>
     
     <div class="token_information_break"></div>
-    <li onclick="create_new_token()" class="new_token_button_li"><a class="new_token_button_li_a">Create New Token</a></li>
-    <li onclick="delete_token()" class="delete_token_button_li"><a class="delete_token_button_li_a">Delete Token</a></li>
+
+    <div onclick="create_new_token()" class="new_token_button button">Create New Token</div>
+    <div onclick="delete_token()" class="delete_token_button button">Delete Token</div>
   </div>
 </ul>
 
