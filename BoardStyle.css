@@ -49,10 +49,7 @@ body, html {
 }
 
 
-
-
-
-/*navbar*/ /* fix all to organize the navbar and information bar the same way */
+/*navbar*/
 .navbar {
     position: fixed; /*not so sure if this should be fixed or not*/
     z-index: 5;
@@ -77,10 +74,10 @@ body, html {
     width: 500px;
     max-width: 30%;
 }
-.navbar_li {
+.navbar > li {
     float: left;
 }
-.navbar_li_a {
+.navbar > li > a {
     display: block;
     text-align: center;
     padding-top: 10px;
@@ -94,7 +91,7 @@ body, html {
     color: white;
     
 }
-.navbar_li_a:hover { /* fix to be on navbar_li instead of the text <a> */
+.navbar > li > a:hover { /* fix to be on navbar_li instead of the text <a> */
     background-color: rgb(80, 80, 80);
     border-bottom: 5px solid rgb(80, 80, 80);
     cursor: pointer;
@@ -102,35 +99,28 @@ body, html {
 
 .minimize_navbar {  
     float: right;
-    width: 20px;
+    width: 28px;
     text-align: center;
-    padding: 0px;
+    user-select: none;
+    text-decoration: none;
+
+    padding-top: 10px;
+    padding-bottom: 5px;
+
+    font-size: 16;
+    color: white; 
+}
+.minimize_navbar:hover {
+    background-color: rgb(80, 80, 80);
+    border-bottom: 5px solid rgb(80, 80, 80);
+    cursor: pointer;
 }
 .minimize_navbar_seperator {
     width: 4px;
     height: 39px;
     float: right;
     margin-bottom: 0px;
-    background-color: rgb(68,68,68);
-    
-}
-.minimize_navbar_li_a {
-    display: block;
-    text-align: center;
-    padding-top: 10px;
-    padding-bottom: 5px;
-    padding-left: 4px;
-    padding-right: 4px;
-    text-decoration: none;
-    user-select: none;
-
-    font-size: 16;
-    color: white;   
-}
-.minimize_navbar_li_a:hover { /* fix to be on navbar_li instead of the text <a> */
-    background-color: rgb(80, 80, 80);
-    border-bottom: 5px solid rgb(80, 80, 80);
-    cursor: pointer;
+    background-color: rgb(68,68,68);   
 }
 /*end navbar*/
 

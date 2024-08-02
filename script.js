@@ -206,7 +206,7 @@ var minimize_navbar_seperator = document.getElementsByClassName("minimize_navbar
 var minimize_navbar_seperator_width = Number(window.getComputedStyle(minimize_navbar_seperator).width.split('px')[0]); //seperator width
 
 var amount = navbar_width - minimize_navbar_width - minimize_navbar_seperator_width; //amount to minimize such that button still shows
-var minimize_navbar_inner = document.getElementsByClassName("minimize_navbar_li_a")[0]; //text element
+var minimize_navbar_inner = document.getElementsByClassName("minimize_navbar")[0]; //text element
 var navbar_minimized = false;
 function minimize_navbar_button() { //called by buttonpress on navbar
     if(!navbar_minimized) { //determines how far it needs to scroll and adjusts margin-left to move it offscreen

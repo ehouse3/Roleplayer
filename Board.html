@@ -14,11 +14,11 @@ Thank you!
 
 <!--top navbar-->
 <ul class="navbar" id="navbar">
-  <li class="navbar_li"><a class="navbar_li_a" onclick="home_button()" href="Home.html">Home</a></li>
-  <li class="navbar_li"><a class="navbar_li_a" style="border-bottom: 5px solid rgb(68,68,68);" onclick="board_button()" href="Board.html">Board</a></li>
+  <li><a onclick="home_button()" href="Home.html">Home</a></li>
+  <li><a style="border-bottom: 5px solid rgb(68,68,68);" onclick="board_button()" href="Board.html">Board</a></li>
 
-  <li class="minimize_navbar"><a class="minimize_navbar_li_a" onclick="minimize_navbar_button()">&lt</a></li>
-  <li class="minimize_navbar_seperator"></li>
+  <div class="minimize_navbar" onclick="minimize_navbar_button()">&lt</div>
+  <div class="minimize_navbar_seperator"></div>
 </ul>
 
 <!--token information bar-->
@@ -32,6 +32,7 @@ Thank you!
     
     <div class="token_information_break"></div>
     <li onclick="create_new_token()" class="new_token_button_li"><a class="new_token_button_li_a">Create New Token</a></li>
+    <li onclick="delete_token()" class="delete_token_button_li"><a class="delete_token_button_li_a">Delete Token</a></li>
   </div>
 </ul>
 
