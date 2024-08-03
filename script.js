@@ -24,7 +24,6 @@ class Token {
             this.element_circle_1.setAttribute("r", Number(this.width / 2) + "px");
         } else {
             //this._width = this.element_circle_0.getAttribute("r");
-            console.log();
         }
 
         this._unique_id = unique_id;
@@ -166,6 +165,11 @@ class Token {
     remove_draggable() { 
         //not functional, need to adjust scope of event handler functions in order to remove the listeners alltogether
         console.log("removing draggability from " + this.name);
+        this.element_parent.parentElement.removeEventListener('pointerdown', this.start_drag);
+        this.element_parent.parentElement.removeEventListener('pointerup', this.end_drag);
+        this.element_parent.parentElement.removeEventListener('pointercancel', this.end_drag);
+        this.element_parent.parentElement.removeEventListener('pointermove', this.move_drag);
+        this.element_parent.parentElement.removeEventListener('touchstart', (event) => event.preventDefault());
         
     }
 
@@ -246,13 +250,20 @@ var cur_displayed_token = '';
 var name_element = document.getElementById("name");
 var health_element = document.getElementById("health");
 var mana_element = document.getElementById("mana");
-var border_element = document.getElementById("border");
+var size_element = document.getElementById("size");
 function update_token_information() {
-    console.log(cur_displayed_token);
-    name_element.innerHTML = cur_displayed_token.name;
-    health_element.innerHTML = "hp : " + cur_displayed_token.health;
-    mana_element.innerHTML = "mp : " + cur_displayed_token.mana;
-    border_element.innerHTML = "size : " + cur_displayed_token.width;
+    if(!cur_displayed_token.name) { //if undefined
+        console.log("woots");
+        name_element.innerHTML = "token name";
+        health_element.innerHTML = "health points";
+        mana_element.innerHTML = "mana points";
+        size_element.innerHTML = "size";
+    } else {
+        name_element.innerHTML = cur_displayed_token.name;
+        health_element.innerHTML = "hp : " + cur_displayed_token.health;
+        mana_element.innerHTML = "mp : " + cur_displayed_token.mana;
+        size_element.innerHTML = "size : " + cur_displayed_token.width;
+    }
 }
 
 //game board and variables
@@ -338,7 +349,7 @@ function start_pan(event) { //starting pan event handler
     }
 }
 function end_pan(event) { //ending pan event handler
-    if(event.button == 2){
+    if(panning){
         //console.log("ending pan");
         panning = false;
     }   
@@ -359,7 +370,7 @@ var box_selecting = false;
 var start_x = 0;
 var start_y = 0;
 var cur_x = 0;
-var  cur_y = 0;
+var cur_y = 0;
 var selector_element = document.getElementById("selector");
 function start_select(event) { //selection start handler
     if(event.button !== 0) return; //mouse 0 only
@@ -370,8 +381,9 @@ function start_select(event) { //selection start handler
         while(token_i < tokens_list.length) { //itterates through tokens until it finds the one that the cursor is over
             if(target_id == tokens_list[token_i].unique_id && tokens_list[token_i].selected == false) {
                 tokens_list[token_i].selected = true;
-                selected_tokens_list.push(tokens_list[token_i])
+                selected_tokens_list.push(tokens_list[token_i]);
                 cur_displayed_token = tokens_list[token_i];
+
                 token_i = tokens_list.length; //exit loop
             }
             token_i++;
@@ -399,6 +411,7 @@ function start_select(event) { //selection start handler
     start_y = (event.clientY * 100/cur_zoom_value) + board_container.scrollTop - 800;
     selector_element.setAttribute("x", start_x); 
     selector_element.setAttribute("y", start_y);
+
 }
 function move_select(event) { //selection move handler
     if(!box_selecting) return;
@@ -432,8 +445,8 @@ function end_select(event) { //selection end handler
         //unselects previous tokens & clears selected list
         for(let selected_tokens_list_i = 0; selected_tokens_list_i < selected_tokens_list.length; selected_tokens_list_i++) { //remove all selected
             selected_tokens_list[selected_tokens_list_i].selected = false;
-    }
-    selected_tokens_list = [];
+        }
+        selected_tokens_list = [];
         return;
     }
     //itterates through all tokens, and if their position is inside the selection_box, add Token to selected_tokens_list
@@ -477,7 +490,6 @@ board_container.addEventListener('pointercancel', end_select);
 board_container.addEventListener('pointermove', move_select);
 
 var token_prefab = document.getElementById("token_prefab");
-console.log(token_prefab);
 var unique_id = 0; //assigns a different unique id to each created token
 function create_new_token() { //clones and appends prefab. Then creates token with appropiate creation functions
     let new_element = token_prefab.cloneNode(true);
@@ -488,6 +500,31 @@ function create_new_token() { //clones and appends prefab. Then creates token wi
     new_token.make_draggable();
     new_token.set_border([60, 60, 60],[78, 78, 78]);
     unique_id++;
+}
+function delete_token() {
+    console.log("removing token");
+    if(cur_displayed_token && selected_tokens_list.length == 0) {
+        let index = tokens_list.indexOf(cur_displayed_token);
+        tokens_list.splice(index, 1);
+
+        cur_displayed_token.remove_draggable(); //remove listener
+        cur_displayed_token.element_parent.remove(); //remove element
+        delete cur_displayed_token;
+        cur_displayed_token = '';
+        update_token_information();
+    } else {
+        for(var token_i = 0; token_i < selected_tokens_list.length; token_i++) {        
+            let index = tokens_list.indexOf(selected_tokens_list[token_i]);
+            tokens_list.splice(index, 1);
+
+            selected_tokens_list[token_i].remove_draggable(); //remove listener
+            selected_tokens_list[token_i].element_parent.remove(); //remove element
+            delete selected_tokens_list[token_i]; //garbage collection would reclaim anyway
+
+        }
+        selected_tokens_list = [];
+
+    }
 }
 
 //creating tokens
@@ -520,6 +557,8 @@ new_token5.health = 100;
 new_token5.make_draggable();
 new_token5.set_border([60, 60, 60],[78, 78, 78]);
 tokens_list.push(new_token5);
+
+
 
 
 
