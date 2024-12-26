@@ -21,5 +21,5 @@ the app has a main board page that can create draggable objects(Tokens), and inc
 - UI display to swap between pages w/ animated minimize button
 - Scaleable grid
 - Adjustable grid
-  - TODO: add settings menu on main ui for grind changes
+  - TODO: add settings menu on main ui for grid changes
 
