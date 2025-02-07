@@ -1,4 +1,3 @@
-//once i figure out how to link multiple js files, this can be easily moved to clear up space and make it more readable.
 class Token {
     /*
     class to create a movable and storable token objects:
@@ -6,7 +5,8 @@ class Token {
     element: html element
     cur_x: current x coordinate
     cur_y: current y coordinate
-    width: 
+    width: width of token (multiple of 12)
+    unique_id: id assigned to distinguish tokens (element attribute)
     */
     constructor(name = '(no name given)', element_parent, cur_x=0, cur_y=0, width, unique_id) {
         //uses _var naming scheme to prevent idefinite recursive calls
@@ -34,7 +34,7 @@ class Token {
         this._selected = false;
         this.previous_border_0 = '';
         this.previous_border_1 = '';
-        this._movement_allowed = true;
+        this._movement_allowed = true; //intermittent movement check for dragging
 
         //token game stats
         this._health = 10;
@@ -253,7 +253,6 @@ var mana_element = document.getElementById("mana");
 var size_element = document.getElementById("size");
 function update_token_information() {
     if(!cur_displayed_token.name) { //if undefined
-        console.log("woots");
         name_element.innerHTML = "token name";
         health_element.innerHTML = "health points";
         mana_element.innerHTML = "mana points";
@@ -501,7 +500,7 @@ function create_new_token() { //clones and appends prefab. Then creates token wi
     new_token.set_border([60, 60, 60],[78, 78, 78]);
     unique_id++;
 }
-function delete_token() {
+function delete_token() { //
     console.log("removing token");
     if(cur_displayed_token && selected_tokens_list.length == 0) {
         let index = tokens_list.indexOf(cur_displayed_token);
@@ -526,10 +525,15 @@ function delete_token() {
 
     }
 }
+function toggle_token_movement() {
+    console.log("toggling token movement");
+    
 
-//creating tokens
+}
 
 
+
+//creating starting tokens
 let new_element2 = document.getElementsByClassName("token")[1];
 let new_token2 = new Token("starting token S", new_element2, 125, 100, 12, "a");
 new_token2.health = 25;
@@ -570,4 +574,4 @@ tokens_list.push(new_token5);
 
 
 
-console.log("");
+console.log("RUNNING SCRIPT");

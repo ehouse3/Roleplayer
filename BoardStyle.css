@@ -167,9 +167,10 @@ body, html {
 }
 
 .token_information_break { /* i dont know how to make this work in flexbox */
-    height: 222px;
+    /* height: 222px; */
+    height: 185px;
 }
-.new_token_button, .delete_token_button {
+.new_token_button, .delete_token_button, .toggle_movement_button { /*7+7+16 height*/
     border-top: 4px solid rgb(68,68,68);
     text-align: center;
     user-select: none;
