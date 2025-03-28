@@ -117,7 +117,6 @@ export class Token {
     }
 
 
-    //https://www.redblobgames.com/making-of/draggable/examples.html
     //draggability handler
     event_to_svg_coordinates = (event, el=event.currentTarget) => {//converts event's argument coordinates to svg coordinates
         const svg = this.element_parent.parentElement;

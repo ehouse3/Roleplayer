@@ -46,7 +46,7 @@ Thank you!
 <!--game board-->
 <div id = "game_board_container" class="game_board_container" >
   <!--svg for game board pattern. viewbox, width and height defined in script.js under game board-->
-  <svg id = "game_board_svg" class="game_board_svg" viewBox="" width="" height="">
+  <svg id = "game_board_svg" class="game_board_svg" viewBox="0 0 2000 1000" width="2000" height="1000">
       <defs>
         <!--
         <pattern id="pattern-slashes" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(40 0 0)">
@@ -61,10 +61,10 @@ Thank you!
       </defs>
     
       <!--rect to display pattern, width and height defined in script.js under game board-->
-      <rect id="game_board" x="0" y="0" width="" height="" fill="url(#grid-overlay)" stroke="#ccc"></rect>
+      <rect id="game_board" x="0" y="0" width="0" height="0" fill="url(#grid-overlay)" stroke="#ccc"></rect>
 
       <!--rect for selecting objects-->
-      <rect id="selector" x="" y="" width="" height="" rx="5" ry="5"></rect>
+      <rect id="selector" x="0" y="0" width="0" height="0" rx="5" ry="5"></rect>
     
       <!--token prefab-->
       <g id="token_prefab" class="token draggable">

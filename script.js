@@ -1,6 +1,7 @@
 import {Token} from './Token.js'
+
+
 //navbar
-//console.log("loading script...");
 function home_button() {
     console.log("loading home page...");
 }
@@ -32,6 +33,7 @@ function minimize_navbar() { //called by buttonpress on navbar
         navbar_minimized = false;
     }
 }
+window.minimize_navbar = minimize_navbar;
 
 //minimize token-information
 //calculating how far to minimize the tab
@@ -55,6 +57,7 @@ function minimize_token_information() { //called by buttonpress on token informa
         token_information_minimized = false;
     }
 }
+window.minimize_token_information = minimize_token_information;
 
 var cur_displayed_token = '';
 var name_element = document.getElementById("name");
@@ -132,7 +135,7 @@ zoom_slider.oninput = function() {
 //sets zoom_slider value to +1/-1 step then calls set_zoom() to match the new value
 //might want to rework later to not be dependant on zoom slider
 function mouse_zoom(event) {
-    step = zoom_slider.getAttribute("step");
+    let step = zoom_slider.getAttribute("step");
     event.preventDefault();
     //console.log("X " + event.clientX + " Y " + event.clientY);
     if(event.deltaY < 0){
@@ -286,10 +289,10 @@ function end_select(event) { //selection end handler
     box_selecting = false;
     cur_x = 0;
     cur_y = 0;
-    selector_element.setAttribute("width", "");
-    selector_element.setAttribute("height", "");
-    selector_element.setAttribute("x", "");
-    selector_element.setAttribute("y", "");
+    selector_element.setAttribute("width", "0");
+    selector_element.setAttribute("height", "0");
+    selector_element.setAttribute("x", "0");
+    selector_element.setAttribute("y", "0");
 }
 
 //binding handlers
@@ -310,7 +313,8 @@ function create_new_token() { //clones and appends prefab. Then creates token wi
     new_token.set_border([60, 60, 60],[78, 78, 78]);
     unique_id++;
 }
-function delete_token() { //
+window.create_new_token = create_new_token;
+function delete_token() { 
     console.log("removing token");
     if(cur_displayed_token && selected_tokens_list.length == 0) {
         let index = tokens_list.indexOf(cur_displayed_token);
@@ -318,7 +322,6 @@ function delete_token() { //
 
         cur_displayed_token.remove_draggable(); //remove listener
         cur_displayed_token.element_parent.remove(); //remove element
-        //delete cur_displayed_token; //FIX
         cur_displayed_token = '';
         update_token_information();
     } else {
@@ -335,11 +338,13 @@ function delete_token() { //
 
     }
 }
+window.delete_token = delete_token;
 function toggle_token_movement() {
     console.log("toggling token movement");
     
 
 }
+window.toggle_token_movement = toggle_token_movement;
 
 
 
